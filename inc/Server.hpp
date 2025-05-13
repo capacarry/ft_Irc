@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:35:23 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/05/12 17:02:00 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:33:49 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Server
         ~Server();
         
         /*action functions*/
-        void initServer();
+        void initServer(int port);
         void createSocket();
         
         /*getters and setters*/
@@ -44,7 +44,7 @@ class Server
         void closeAll();
         void closeEvent(int fd);
         void acceptClient();
-        void parseData(int fd);
+        void receiveData(int fd);
 
         int epollFd; //epoll instance
 }; 

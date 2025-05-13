@@ -3,20 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:50:54 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/05/12 17:07:54 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:32:49 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Server.hpp"
 
+//set signal to false
 bool Server::_signal = false; 
 
-/*CONSTRUCTOR AND DESTRUCTOR*/
+
+/*------------------------------------------------------------------------------*/
+/*CONSTRUCTOR AND DESTRUCTOR 🚧 */ 
+
 Server::Server():_socketFd(-1)
-{    //set signal to false
+{    
    
     std::cout << GRE << BOLD << "Server created" << RESET << std::endl;
 }
@@ -29,14 +33,16 @@ Server::~Server()
 
 
 /*----------------------------------------------------------------------------*/
-/*ACTION FUNCTIONS*/
-void Server::initServer()
+/*ACTION FUNCTIONs 🔨*/ 
+
+void Server::initServer(int port)
 {
-    setPort(6667); //standart irc port
+    setPort(port); //standart irc port
     createSocket(); // create listening socket
 
     std::cout << GRE << "Server <" << getSocketFd() << "> Connected" << WHI << std::endl;
-    std::cout << "Waiting to accept a connection...\n";
+    std::cout << "\033[5m" << "Waiting to accept a connection...\n" << "\033[25m";
+
 
     const int maxEvents = 64; //max events to handle
     struct epoll_event events[maxEvents]; //events array
@@ -55,12 +61,12 @@ void Server::initServer()
                 if(eventFd == getSocketFd())
                 {   
                     std::cout << GRE << BOLD << "New connection accepted" << RESET << std::endl;
-                    //acceptClient(); //accept new client
+                    acceptClient(); //accept new client
                 }
                 else
                 {   
                     std::cout << GRE << BOLD << "Data received from client" << RESET << std::endl;
-                    //parseData(eventFd); //parse data from client
+                    receiveData(eventFd); //receive data from client
                 }
             }
             else if(events[i].events & (EPOLLERR | EPOLLHUP))
@@ -125,6 +131,9 @@ void Server::createSocket()
     struct epoll_event event; // event structure for epoll (ex: if a client is connected)
     epollFd = epoll_create1(0); // create epoll instance( create the manager who will control the events)
     
+    if (epollFd == -1)
+    throw std::runtime_error("Error creating epoll instance");
+
     serverAddr.sin_family = AF_INET; //IPv4
     serverAddr.sin_addr.s_addr = INADDR_ANY; //any local address
     serverAddr.sin_port = htons(getPort()); //port number
@@ -169,8 +178,81 @@ void Server::signalHandler(int signum)
 
 
 
+/*-----------------------------------------------------------------------------------------------------------*/
+/*CLIENT MANAGING FUNCTIONS 🧑‍🤝‍🧑*/
+
+void Server::acceptClient()
+{   
+    //Criamos um novo client
+    Client new_cli;
+    //client adress details(ip e port)
+    struct sockaddr_in cli_add;
+    socklen_t len = sizeof(cli_add);
+    
+    //automaticamente criamos um novo client (socket);
+    int new_cli_fd = accept(Server::getSocketFd(), (sockaddr *)&cli_add, &len);
+    if(new_cli_fd == -1)
+    {
+        std::cerr << RED << "accept() failed" << RESET << std::endl;
+        return;
+    }
+    //O_NONBLOCKING significa que o programa nao vai ficar a espera da socket no caso de correr mal
+    if(fcntl(new_cli_fd,F_SETFL, O_NONBLOCK) == -1)
+    {
+        std::cerr << RED << "fcntl() failed" << RESET << std::endl;
+        return;
+    }
+
+    //novo evento epoll()
+    struct epoll_event event;
+
+    event.events = EPOLLIN; // definimos este evento como (read data)
+    event.data.fd = new_cli_fd; //atribuimos o a socket do cliente a este evento
+
+    /*Aqui pegamos no noss epollFD (o nosso manager) e adicionamos o new_cli_fd
+    a instancia gerida por este*/
+    if (epoll_ctl(epollFd, EPOLL_CTL_ADD, new_cli_fd, &event) == -1)
+    {
+        std::cout << "epoll_ctl() failed to add client socket" << std::endl;
+        return;
+    }
+
+    /*adicionamos as informacoes do cli*/
+    new_cli.setFd(new_cli_fd);
+    new_cli.setIp(inet_ntoa((cli_add.sin_addr)));
+    /*por fim, meter no vetor*/
+    _clients.push_back(new_cli);
+    std::cout << GRE << "Client <" << new_cli_fd << "> Connected" << WHI << std::endl;
+}
+
+void Server::receiveData(int fd)
+{   
+    //buffer para receber a data
+    char buff[1024];
+    memset (buff, 0,sizeof(buff));
+    //receber a data em bytes
+    ssize_t bytes = recv(fd,buff,sizeof(buff) - 1, 0);
+
+    if(bytes <= 0)
+    {
+        std::cout << RED << "CLIENT <" << fd << " > Disconnected" << RESET << std::endl;
+        closeEvent(fd);
+        close(fd);
+    }
+    else
+    {   
+        //print da data
+        buff[bytes] = '\0';
+        std::cout << YEL << "Client <" << fd << " > Data: " << "\033[3m" << RESET << buff << "\033[23m"  << RESET << std::endl;
+        /*AQUI COMECA A PARTE DE PARSING DA DATA
+        parse, check, authenticate, handle the command, etc...*/
+    }
+}
+
+
 /*----------------------------------------------------------------------------------------------*/
-/*GETTERS AND SETTERS*/
+/*GETTERS AND SETTERS 🔒*/
+
 void Server::setPort(int port)
 {
     _port = port;

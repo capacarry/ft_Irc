@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:36:22 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/05/12 16:47:31 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:37:12 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,4 @@
 #include <unistd.h>
 #include <sys/epoll.h>
 #include <fcntl.h>
+#include <sstream>
