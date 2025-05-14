@@ -6,7 +6,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 
 RM = rm -rf
 
-SRC = main.cpp srcs/Server.cpp srcs/Client.cpp 
+SRC = main.cpp srcs/Server.cpp srcs/Client.cpp srcs/Utils.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

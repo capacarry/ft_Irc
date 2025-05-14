@@ -1,33 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client.hpp                                         :+:      :+:    :+:   */
+/*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 13:36:03 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/05/14 15:17:29 by gcapa-pe         ###   ########.fr       */
+/*   Created: 2025/05/14 15:22:43 by gcapa-pe          #+#    #+#             */
+/*   Updated: 2025/05/14 15:24:10 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "../inc/Irc.hpp"
 
-#include "Irc.hpp"
-
-class Server;
-
-class Client
+int convToInt(std::string port)
 {
-    private:
-        int _fd; // client socket
-        std::string _ip; // client ip
+    int nb;
     
-    public:
-        Client();
-        
-        /* GETTERS AND SETTERS */
-        void setFd(int fd);
-        void setIp(std::string ip);
-        int getFd() const;
-        std::string getIp() const;
-};
+    std::istringstream(port) >> nb;
+    return nb;
+}

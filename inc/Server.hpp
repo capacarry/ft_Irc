@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:35:23 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/05/13 14:33:49 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:17:33 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "Client.hpp"
-#include "Ft_irc.hpp"
+#include "Irc.hpp"
 
 class Client;
 
@@ -21,19 +21,19 @@ class Server
 {
     private:
         int _port;
-        int _socketFd; //listening socket
-        static bool _signal; //signal handler (ctrl + d) etc...
-        std::vector<Client> _clients; //clients vector
+        int _socketFd; // listening socket
+        static bool _signal; // signal handler (ctrl + c, ctrl + /)
+        std::vector<Client> _clients; // clients vector
    
     public:
         Server();
         ~Server();
         
-        /*action functions*/
+        /* ACTION FUNCTIONS */
         void initServer(int port);
         void createSocket();
         
-        /*getters and setters*/
+        /* GETTERS AND SETTERS */
         void setPort(int port);
         void setSocketFd(int socketFd);
         int getPort() const;
@@ -46,5 +46,5 @@ class Server
         void acceptClient();
         void receiveData(int fd);
 
-        int epollFd; //epoll instance
-}; 
+        int epollFd; // epoll instance
+};

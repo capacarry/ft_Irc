@@ -6,25 +6,25 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:43:30 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/05/12 15:51:14 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:18:26 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Client.hpp"
 
+/*----------------------------------------------------------------------------*/
+/* CONSTRUCTOR 🚧 */
 Client::Client()
 {
-    std::cout << GRE << BOLD << "Client created" << RESET << std::endl;
-}
-
-Client::~Client()
-{
-    std::cout << RED << BOLD << "Client destroyed" << RESET << std::endl;
+    std::cout << GRE << B << "Client created" << R << std::endl;
 }
 
 /*----------------------------------------------------------------------------*/
 
-/*GETTERS AND SETTERS*/
+
+
+/*----------------------------------------------------------------------------*/
+/* GETTERS AND SETTERS */
 void Client::setFd(int fd)
 {
     _fd = fd;
@@ -34,6 +34,7 @@ void Client::setIp(std::string ip)
 {
     _ip = ip;
 }
+
 int Client::getFd() const
 {
     return _fd;
@@ -43,3 +44,5 @@ std::string Client::getIp() const
 {
     return _ip;
 }
+
+/*----------------------------------------------------------------------------*/
