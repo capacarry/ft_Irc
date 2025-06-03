@@ -1,0 +1,312 @@
+Client <5>: CAP LS 302
+PASS pass
+NICK minguito
+USER minguitoG 0 * :realname
+
+Client <5>: JOIN pila
+
+Client <5>: MODE #pila
+
+Client <5>: WHO #pila
+
+Client <6>: CAP LS 302
+JOIN :
+
+Client <6>: PASS pass
+
+Client <6>: NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <6>: PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <6>: MODE capa +i
+
+Client <6>: JOIN #pila
+
+Client <6>: MODE #pila
+
+Client <6>: PRIVMSG #pila :hey
+
+Client <6>: PING irc.42.local
+
+Client <6>: PRIVMSG #pila :fodase
+
+Client <5>: PRIVMSG #pila :crlh
+
+Client <6>: PRIVMSG #pila :asaf
+
+Client <5>: PRIVMSG #pila :sad
+
+Client <6>: QUIT :leaving
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+
+Client <5>: JOIN :
+
+Client <5>: PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: MODE capa +i
+
+Client <5>: JOIN #bolas
+
+Client <5>: MODE #bolas
+
+Client <6>: CAP LS 302
+PASS pass
+
+Client <6>: NICK minguito
+USER minguitoG 0 * :realname
+
+Client <5>: PING irc.42.local
+
+Client <6>: JOIN bolas
+
+Client <6>: MODE #bolas
+
+Client <6>: WHO #bolas
+
+Client <6>: PRIVMSG #bolas :hey
+
+Client <5>: PRIVMSG #bolas :hey
+
+Client <5>: CAP LS 302
+PASS pass
+NICK minguito
+USER minguitoG 0 * :realname
+
+Client <5>: JOIN test
+
+Client <5>: MODE #test
+
+Client <5>: WHO #test
+
+Client <6>: CAP LS 302
+
+Client <6>: JOIN :
+
+Client <6>: PASS pass
+
+Client <6>: NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <6>: PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <6>: MODE capa +i
+
+Client <6>: JOIN #test
+
+Client <6>: PRIVMSG #test :hey
+
+Client <6>: MODE #test
+
+Client <5>: PRIVMSG #test :hey
+
+Client <6>: PING irc.42.local
+
+Client <5>: PRIVMSG #test :ola
+
+Client <5>: PRIVMSG #test :asdas
+
+Client <5>: PRIVMSG #test :asd
+
+Client <5>: PRIVMSG #test :asd
+
+Client <5>: PRIVMSG #test :asd
+
+Client <6>: CAP LS 302
+
+Client <6>: JOIN :
+
+Client <6>: PASS pass
+
+Client <6>: NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <6>: PASS pass
+
+Client <6>: NICK capa
+USER capa capa localhost :Gui
+
+Client <6>: MODE capa +i
+
+Client <6>: JOIN #test
+
+Client <6>: MODE #test
+
+Client <6>: PING irc.42.local
+
+Client <5>: CAP LS 302
+JOIN :
+
+Client <5>: PASS pass
+
+Client <5>: NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: MODE capa +i
+
+Client <5>: JOIN #bujao
+
+Client <5>: MODE #bujao
+
+Client <6>: CAP LS 302
+PASS pass
+NICK minguito
+USER minguitoG 0 * :realname
+
+Client <6>: JOIN bujao
+
+Client <6>: MODE #bujao
+
+Client <6>: WHO #bujao
+
+Client <5>: PING irc.42.local
+
+Client <6>: PRIVMSG #bujao :hey
+
+Client <5>: PRIVMSG #bujao :hey
+
+Client <5>: QUIT :leaving
+
+Client <6>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+JOIN :
+
+Client <5>: PASS pass
+
+Client <5>: NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: MODE capa +i
+
+Client <5>: JOIN #channel_1
+
+Client <5>: MODE #channel_1
+
+Client <6>: CAP LS 302
+PASS pass
+NICK minguito
+USER minguitoG 0 * :realname
+
+Client <5>: PING irc.42.local
+
+Client <6>: JOIN #channel_1
+
+Client <6>: MODE #channel_1
+
+Client <6>: WHO #channel_1
+
+Client <6>: PRIVMSG #channel_1 :sdada
+
+Client <5>: PRIVMSG #channel_1 :dsads
+
+Client <5>: CAP LS 302
+PASS pass
+
+Client <5>: NICK minguito
+USER minguitoG 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+
+Client <5>: JOIN :
+
+Client <5>: PASS pass
+
+Client <5>: NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: PASS pass
+NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: MODE capa +i
+
+Client <5>: JOIN #net_1
+
+Client <5>: MODE #net_1
+
+Client <6>: CAP LS 302
+PASS pass
+
+Client <6>: NICK minguito
+USER minguitoG 0 * :realname
+
+Client <6>: JOIN net_1
+
+Client <6>: MODE #net_1
+
+Client <6>: WHO #net_1
+
+Client <5>: PING irc.42.local
+
+Client <6>: PRIVMSG #net_1 :yo
+
+Client <5>: PRIVMSG #net_1 :yo
+
+Client <6>: TOPIC #net_1 :fdg
+
