@@ -356,3 +356,91 @@ Client <5>: QUIT :Leaving
 
 Client <6>: QUIT :Leaving
 
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK mario
+USER mario4 0 * :realname
+
+Client <5>: JOIN all
+
+Client <5>: MODE #all
+
+Client <5>: WHO #all
+
+Client <5>: PART #all :Leaving
+
+Client <5>: JOIN all
+
+Client <5>: MODE #all
+
+Client <5>: WHO #all
+
+Client <5>: PART #all :Leaving
+
+Client <5>: JOIN pila
+
+Client <5>: MODE #pila
+
+Client <5>: WHO #pila
+
+Client <5>: PART #pila :Leaving
+
+Client <5>: JOIN pila
+
+Client <5>: MODE #pila
+
+Client <5>: WHO #pila
+
+Client <6>: CAP LS 302
+PASS mamas
+NICK bruno
+USER burno4 0 * :realname
+
+Client <6>: JOIN pila
+
+Client <6>: MODE #pila
+
+Client <6>: WHO #pila
+
+Client <6>: PART #pila :Leaving
+
+Client <5>: PRIVMSG #pila :dgds
+
+Client <5>: PRIVMSG #pila :sdf
+
+Client <5>: PRIVMSG #pila :sdf
+
+Client <5>: PRIVMSG #pila :sdf
+
+Client <5>: PRIVMSG #pila :sdf
+
+Client <5>: PRIVMSG #pila :sdf
+
+Client <5>: PRIVMSG #pila :sdfds
+
+Client <5>: PART #pila :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK bruno
+USER burno4 0 * :realname
+
+Client <5>: JOIN banana
+
+Client <5>: MODE #banana
+
+Client <5>: WHO #banana
+
+Client <5>: JOIN all
+
+Client <5>: MODE #all
+
+Client <5>: WHO #all
+
+Client <5>: PART #banana :sad
+
+Client <5>: PART #all :Leaving
+
+Client <5>: QUIT :Leaving
+

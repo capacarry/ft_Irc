@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:50:54 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/20 15:51:37 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:50:14 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,23 @@ void Server::initServer(int port, std::string password)
         }
     }
     closeAll(); // close all sockets and clients
+}
+
+void Server::removeChannel(const std::string& name)
+{
+    std::map<std::string, Channel>::iterator it = _channels.find(name);
+    if (it != _channels.end())
+    {
+        if (it->second.isEmpty()) // if channel is empty, remove it
+        {
+            _channels.erase(it);
+            std::cout << YEL << B << "Channel <" << name << "> removed" << R << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << RED << B << "Channel <" << name << "> not found" << R << std::endl;
+    }
 }
 
 void Server::printChannelInfo() const

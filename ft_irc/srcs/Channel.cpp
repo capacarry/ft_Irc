@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:45:36 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/18 12:33:59 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:44:10 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,16 @@ void Channel::addClient(Client* client) {
             return;
     }
     _clients.push_back(client);
+}
+
+bool Channel::isEmpty() const {
+    if( _clients.empty() ) {
+        std::cout << RED << B << "Channel " << _name << " is empty" << R << std::endl;
+        return true;
+    }
+    else
+        return false;
+    
 }
 
 std::vector<Client*> Channel::getClients() const {

@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:52:41 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/20 16:26:32 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:42:54 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,70 @@ void CommandHandler::handleCommand(Server &server, Client &client, const std::st
         } else if (cmd == "PRIVMSG") {
             handlePrivmsg(server, client, args);
         } else if (cmd == "QUIT") {
-            // handleQuit(server, client, args);
+            handleQuit(server, client, args);
+        } else if (cmd == "PART"){
+            handlePart(server, client, args);
         } else {
             std::cerr << "Unknown command: " << cmd << std::endl;
         }
     }
+}
+
+
+void CommandHandler::handlePart(Server &server, Client &client, const std::vector<std::string> &args) {
+    if (args.size() < 2) {
+        std::string error = ":irc.42.local 461 " + client.getNickname() + " PART :Not enough parameters\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    std::string chanName = args[1];
+    if (chanName[0] != '#')
+        chanName = "#" + chanName;
+
+    Channel channel = server.getOrCreateChannel(chanName);
+    
+    // Remove client from the channel
+    channel.removeClient(&client);
+
+    // Notify the client
+    std::string partMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost PART :" + chanName + "\r\n";
+    send(client.getFd(), partMsg.c_str(), partMsg.length(), 0);
+
+    // Notify other clients in the channel
+    const std::vector<Client*>& members = channel.getClients();
+    for (size_t i = 0; i < members.size(); ++i) {
+        if (members[i]->getFd() != client.getFd()) {
+            send(members[i]->getFd(), partMsg.c_str(), partMsg.length(), 0);
+        }
+    }
+
+    // If the channel is empty, remove it
+    if (channel.isEmpty()) {
+        server.removeChannel(chanName);
+    }
+}
+
+void CommandHandler::handleQuit(Server &server, Client &client, const std::vector<std::string> &args) {
+    std::string quitMessage = "Client has disconnected";
+    if (args.size() > 1) {
+        quitMessage = args[1];
+        for (size_t i = 2; i < args.size(); ++i) {
+            quitMessage += " " + args[i];
+        }
+    }
+
+    std::cout << "QUIT received: " << quitMessage << std::endl;
+
+    // Notify all channels the client is part of
+    server.removeClientFromAllChannels(&client);
+
+    // Send QUIT message to the client
+    std::string quitMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost QUIT :" + quitMessage + "\r\n";
+    send(client.getFd(), quitMsg.c_str(), quitMsg.length(), 0);
+
+    // Close the client's socket
+    server.closeEvent(client.getFd());
 }
 
 
