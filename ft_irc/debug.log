@@ -1,0 +1,358 @@
+Client <5>: CAP LS 302
+
+Client <5>: CAP LS 302
+
+Client <5>: CAP LS 302
+
+Client <5>: CAP LS 302
+
+Client <5>: CAP LS 302
+
+Client <5>: CAP LS 302
+
+Client <5>: JOIN :
+
+Client <5>: PASS mamas
+
+Client <5>: NICK capa
+USER capa capa localhost :Gui
+
+Client <5>: MODE capa +i
+
+Client <5>: JOIN #all
+
+Client <5>: PART #all
+
+Client <5>: MODE #all
+
+Client <5>: QUIT :leaving
+
+Client <5>: CAP LS 302
+JOIN :
+
+Client <5>: NICK capa
+
+Client <5>: USER capa capa localhost :Gui
+
+Client <5>: MODE capa +i
+
+Client <5>: PING irc.42.local
+
+Client <5>: JOIN #all
+
+Client <5>: MODE #all
+
+Client <5>: PART #all
+
+Client <5>: PART #all
+
+Client <5>: PART #all
+
+Client <5>: QUIT :leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: pass
+
+Client <5>: Pass
+
+Client <5>: PASS
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: PASS
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: JOIN all
+
+Client <5>: MODE #all
+
+Client <5>: WHO #all
+
+Client <5>: PART #all :Leaving
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: JOIN all
+
+Client <5>: JOIN all
+
+Client <5>: PASS
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK lol
+USER lol4 0 * :realname
+
+Client <5>: JOIN fodase
+
+Client <5>: MODE #fodase
+
+Client <5>: WHO #fodase
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamasasdasd
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+PASS mamasasdasd
+
+Client <5>: CAP LS 302
+PASS mamasasdasd
+
+Client <5>: CAP LS 302
+PASS mamasasdasd
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+PASS mamasasdasd
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: pass
+
+Client <5>: PASS
+
+Client <5>: PASS mamas
+
+Client <5>: JOIN all
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: PASS mamas
+
+Client <5>: JOIN hey
+
+Client <5>: JOIN heyasd
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: pass mamas
+
+Client <5>: PASS mamas
+
+Client <5>: JOIN hey
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK lol
+USER lol4 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS dasdasd
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+PASS dasdasd
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+PASS dasdasd
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+JOIN :
+
+Client <5>: CAP LS 302
+
+Client <5>: JOIN :
+
+Client <5>: CAP LS 302
+JOIN :
+
+Client <5>: CAP LS 302
+
+Client <5>: JOIN :
+
+Client <5>: CAP LS 302
+
+Client <5>: JOIN :
+
+Client <5>: CAP LS 302
+PASS dasdasd
+NICK lol
+USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK lol
+USER lol4 0 * :realname
+
+Client <5>: JOIN all
+
+Client <5>: MODE #all
+
+Client <5>: WHO #all
+
+Client <6>: CAP LS 302
+
+Client <6>: JOIN :
+
+Client <6>: CAP LS 302
+JOIN :
+
+Client <6>: CAP LS 302
+JOIN :
+
+Client <6>: CAP LS 302
+
+Client <6>: JOIN :
+
+Client <6>: CAP LS 302
+
+Client <6>: JOIN :
+
+Client <6>: CAP LS 302
+JOIN :
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK lol
+USER lol4 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK lol
+USER lol4 0 * :realname
+
+Client <6>: CAP LS 302
+PASS mamas
+
+Client <6>: NICK banana
+USER banana4 0 * :realname
+
+Client <6>: PRIVMSG 
+
+Client <6>: PRIVMS
+
+Client <6>: PRIVMSG lol fodase
+
+Client <5>: JOIN hey
+
+Client <5>: MODE #hey
+
+Client <5>: WHO #hey
+
+Client <6>: JOIN hey
+
+Client <6>: MODE #hey
+
+Client <6>: WHO #hey
+
+Client <6>: PRIVMSG #hey :dsa
+
+Client <5>: PRIVMSG #hey :ga
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK lol
+USER lol4 0 * :realname
+
+Client <6>: CAP LS 302
+
+Client <6>: PASS mamas
+NICK banana
+USER banana4 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <6>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK banana
+USER banana4 0 * :realname
+
+Client <5>: JOIN lilo
+
+Client <5>: MODE #lilo
+
+Client <5>: WHO #lilo
+
+Client <6>: CAP LS 302
+PASS mamas
+NICK mario
+USER mario4 0 * :realname
+
+Client <6>: JOIN lilo
+
+Client <6>: MODE #lilo
+
+Client <6>: WHO #lilo
+
+Client <6>: PRIVMSG #lilo :sda
+
+Client <5>: PRIVMSG #lilo :gaga
+
+Client <5>: QUIT :Leaving
+
+Client <6>: QUIT :Leaving
+
