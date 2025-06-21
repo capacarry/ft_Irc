@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:36:03 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/02 18:20:18 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:55:12 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class Client
         bool _hasGivenPass; // client has given password
         bool _isRegistered; // client registration status
         bool _serverNeedsPass; // server needs password
+        bool _isoperator; // client is operator
     
     public:
         Client();
@@ -49,4 +50,6 @@ class Client
         std::string getUsername() const;
         bool isRegistered() const;
         void tryRegister();
+        void setIsOperator(bool isOperator) { _isoperator = isOperator; }
+        bool isOperator() const { return _isoperator; }
 };

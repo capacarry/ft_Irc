@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:50:54 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/20 16:50:14 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:38:38 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void Server::closeEvent(int fd)
     /* remove from the clients vector */
     for (size_t i = 0; i < _clients.size(); ++i) 
     {
-        if (_clients[i].getFd() == fd)
+        if (_clients[i]->getFd() == fd)
         {
             _clients.erase(_clients.begin() + i);
             break;
@@ -150,9 +150,9 @@ void Server::closeAll()
     while (i < _clients.size())
     {   
         /* remove client from epoll instance */
-        epoll_ctl(epollFd, EPOLL_CTL_DEL, _clients[i].getFd(), NULL);
-        std::cout << YEL << B << "Closing client socket: " << _clients[i].getFd() << R << std::endl;
-        close(_clients[i].getFd()); // close client socket
+        epoll_ctl(epollFd, EPOLL_CTL_DEL, _clients[i]->getFd(), NULL);
+        std::cout << YEL << B << "Closing client socket: " << _clients[i]->getFd() << R << std::endl;
+        close(_clients[i]->getFd()); // close client socket
         _clients.erase(_clients.begin() + i); // remove client from vector
         i++;
     }
@@ -227,7 +227,7 @@ void Server::signalHandler(int signum)
 
 void Server::acceptClient()
 {   
-    Client new_cli; // create a new client instance
+    Client *new_cli = new Client(); // create a new client instance
     struct sockaddr_in cli_add; // client adress details(ip e port)
     socklen_t len = sizeof(cli_add);
     
@@ -258,12 +258,12 @@ void Server::acceptClient()
     }
 
     /* adicionamos as informacoes do cliente */
-    new_cli.setFd(new_cli_fd);
-    new_cli.setIp(inet_ntoa((cli_add.sin_addr)));
+    new_cli->setFd(new_cli_fd);
+    new_cli->setIp(inet_ntoa((cli_add.sin_addr)));
     if(getPassword().empty())
-        new_cli.setServerNeedsPass(false);
+        new_cli->setServerNeedsPass(false);
     else
-        new_cli.setServerNeedsPass(true);
+        new_cli->setServerNeedsPass(true);
     /* por fim, inserir no vetor */
     _clients.push_back(new_cli);
     std::cout << GRE << "Client <" << new_cli_fd << "> Connected" << WHI << std::endl;
@@ -312,12 +312,12 @@ void Server::receiveData(int fd)
         }
         /* AQUI COMECA A PARTE DE PARSING DA DATA: parse, check, authenticate, handle the command, etc... */
         for (size_t i = 0; i < _clients.size(); ++i) {
-            if (_clients[i].getFd() == fd) {
+            if (_clients[i]->getFd() == fd) {
                 std::string input(buff);
                 std::istringstream stream(input);
                 std::string line;
                 while (std::getline(stream, line)) {
-                    CommandHandler::handleCommand(*this, _clients[i], line);
+                    CommandHandler::handleCommand(*this, *_clients[i], line);
                 }
                 break;
             }
@@ -364,17 +364,25 @@ int Server::getSignal() const
     return _signal;
 }
 
+Client *Server::getClientByNick(const std::string &nick) const {
+    for (size_t i = 0; i < _clients.size(); ++i) {
+        if (_clients[i]->getNickname() == nick)
+            return const_cast<Client*>(_clients[i]); // return non-const pointer
+    }
+    return NULL; // client not found
+}
+
 /*----------------------------------------------------------------------------*/
 
 /*luiberna*/
-Channel& Server::getOrCreateChannel(const std::string& name) {
+Channel& Server::getOrCreateChannel(const std::string& name, Client *client) {
     
     if (_channels.find(name) == _channels.end())
-        _channels[name] = Channel(name); // constructor with name
+        _channels[name] = Channel(name, client); // constructor with name
     return _channels[name];
 }
 
-const std::vector<Client>& Server::getClients() const 
+const std::vector<Client*>& Server::getClients() const 
 {
     return _clients;
 }
@@ -382,8 +390,8 @@ const std::vector<Client>& Server::getClients() const
 Client * Server::getClientByFd(int fd) const 
 {
     for (size_t i = 0; i < _clients.size(); ++i) {
-        if (_clients[i].getFd() == fd)
-            return const_cast<Client*>(&_clients[i]); // return non-const pointer
+        if (_clients[i]->getFd() == fd)
+            return const_cast<Client*>(_clients[i]); // return non-const pointer
     }
     return NULL; // client not found
 }

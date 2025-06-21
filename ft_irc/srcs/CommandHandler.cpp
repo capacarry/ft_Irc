@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:52:41 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/20 16:42:54 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:49:51 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void CommandHandler::handleCommand(Server &server, Client &client, const std::st
 
     // Post-registration commands
     if (client.isRegistered()) {
+        if(cmd == "KICK")
+            handleKick(server, client, args);
         if (cmd == "JOIN") {
             handleJoin(server, client, args);
         } else if (cmd == "PRIVMSG") {
@@ -108,7 +110,7 @@ void CommandHandler::handlePart(Server &server, Client &client, const std::vecto
     if (chanName[0] != '#')
         chanName = "#" + chanName;
 
-    Channel channel = server.getOrCreateChannel(chanName);
+    Channel &channel = server.getOrCreateChannel(chanName, &client);
     
     // Remove client from the channel
     channel.removeClient(&client);
@@ -177,13 +179,13 @@ void CommandHandler::handlePass(Server &server, Client &client, const std::vecto
 
 
 bool CommandHandler::notDuplicateNickname(Server &server, const std::string &nickname) {
-    const std::vector<Client> &clients = server.getClients();
+    const std::vector<Client *> &clients = server.getClients();
     for (size_t i = 0; i < clients.size(); ++i) {
-        if (clients[i].getNickname() == nickname) {
+        if (clients[i]->getNickname() == nickname) {
             std::string error = ":irc.42.local 433 " + nickname + " :Nickname is already in use\r\n";
-            send(clients[i].getFd(), error.c_str(), error.length(), 0);
+            send(clients[i]->getFd(), error.c_str(), error.length(), 0);
             //remove the client from the server's client list
-            server.closeEvent(clients[i].getFd());
+            server.closeEvent(clients[i]->getFd());
             return false;
         }
     }
@@ -191,12 +193,12 @@ bool CommandHandler::notDuplicateNickname(Server &server, const std::string &nic
 }
 
 bool CommandHandler::notDuplicateUsername(Server &server, const std::string &username) {
-    const std::vector<Client> &clients = server.getClients();
+    const std::vector<Client *> &clients = server.getClients();
     for (size_t i = 0; i < clients.size(); ++i) {
-        if (clients[i].getUsername() == username) {
+        if (clients[i]->getUsername() == username) {
             std::string error = ":irc.42.local 433 " + username + " :Username is already in use\r\n";
-            send(clients[i].getFd(), error.c_str(), error.length(), 0);
-            server.closeEvent(clients[i].getFd());
+            send(clients[i]->getFd(), error.c_str(), error.length(), 0);
+            server.closeEvent(clients[i]->getFd());
             return false;
         }
     }
@@ -231,8 +233,7 @@ void CommandHandler::handleJoin(Server& server, Client& client, const std::vecto
     if (chanName[0] != '#')
         chanName = "#" + chanName;
 
-    Channel& channel = server.getOrCreateChannel(chanName);
-
+    Channel& channel = server.getOrCreateChannel(chanName, &client);
     // Add client to the channel
     channel.addClient(&client);
 
@@ -244,10 +245,12 @@ void CommandHandler::handleJoin(Server& server, Client& client, const std::vecto
     std::string topic = ":irc.42.local 332 " + client.getNickname() + " " + chanName + " :No topic is set\r\n";
     send(client.getFd(), topic.c_str(), topic.length(), 0);
 
-    // Send NAMES list (353)
+    // Send NAMES list (353) with @ for operators
     std::string namesReply = ":irc.42.local 353 " + client.getNickname() + " = " + chanName + " :";
     const std::vector<Client*>& members = channel.getClients();
     for (size_t i = 0; i < members.size(); ++i) {
+        if (channel.isOperatorInChannel(members[i]))
+            namesReply += "@";
         namesReply += members[i]->getNickname();
         if (i != members.size() - 1)
             namesReply += " ";
@@ -263,6 +266,14 @@ void CommandHandler::handleJoin(Server& server, Client& client, const std::vecto
     for (size_t i = 0; i < members.size(); ++i) {
         if (members[i]->getFd() != client.getFd()) {
             send(members[i]->getFd(), joinMsg.c_str(), joinMsg.length(), 0);
+        }
+    }
+
+    // Send MODE message to all clients in the channel if the joining client is now an operator
+    if (channel.isOperatorInChannel(&client)) {
+        std::string modeMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost MODE " + chanName + " +o " + client.getNickname() + "\r\n";
+        for (size_t i = 0; i < members.size(); ++i) {
+            send(members[i]->getFd(), modeMsg.c_str(), modeMsg.length(), 0);
         }
     }
 }
@@ -299,7 +310,7 @@ void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::ve
 
     if (target[0] == '#') {
         /// Mensagem para um canal
-        Channel& chan = server.getOrCreateChannel(target);
+        Channel& chan = server.getOrCreateChannel(target, &sender);
         chan.normalizeChannelName(); 
         // Normaliza o nome do canal
         const std::vector<Client*>& members = chan.getClients();
@@ -310,10 +321,10 @@ void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::ve
     }
     else {
         // DM para a shorty
-        const std::vector<Client>& clients = server.getClients();
+        const std::vector<Client *>& clients = server.getClients();
         for (size_t i = 0; i < clients.size(); ++i) {
-            if (clients[i].getNickname() == target) {
-                send(clients[i].getFd(), fullMsg.c_str(), fullMsg.length(), 0);
+            if (clients[i]->getNickname() == target) {
+                send(clients[i]->getFd(), fullMsg.c_str(), fullMsg.length(), 0);
                 return;
             }
         }
@@ -321,5 +332,86 @@ void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::ve
         std::string error = ":irc.42.local 401 " + sender.getNickname() + " " + target + " :No such nick/channel\r\n";
         // Envia o erro para o remetente
         send(sender.getFd(), error.c_str(), error.length(), 0);
+    }
+}
+
+void CommandHandler::handleKick(Server &server, Client &client, const std::vector<std::string> &args)
+{
+    if (args.size() < 3) {
+        std::string error = ":irc.42.local 461 " + client.getNickname() + " KICK :Not enough parameters\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    std::string chanName = args[1];
+    if (chanName[0] != '#')
+        chanName = "#" + chanName;
+
+    if (!server.hasChannel(chanName)) {
+        std::string error = ":irc.42.local 403 " + client.getNickname() + " " + chanName + " :No such channel\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    Channel &channel = server.getOrCreateChannel(chanName, &client);
+
+    // Check if client is in the channel
+    if (!channel.hasClient(&client)) {
+        std::string error = ":irc.42.local 442 " + client.getNickname() + " " + chanName + " :You're not on that channel\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    // Check if the client is a channel operator
+    if (!channel.isOperatorInChannel(&client)) {
+        std::string error = ":irc.42.local 482 " + client.getNickname() + " " + chanName + " :You're not channel operator\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    std::string targetNick = args[2];
+    Client *targetClient = server.getClientByNick(targetNick);
+
+    if (!targetClient) {
+        std::string error = ":irc.42.local 401 " + client.getNickname() + " " + targetNick + " :No such nick\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    if (!channel.hasClient(targetClient)) {
+        std::string error = ":irc.42.local 441 " + client.getNickname() + " " + targetNick + " " + chanName + " :They aren't on that channel\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    // Optional kick reason
+    std::string reason = client.getNickname(); // default reason is kicker's nick
+    if (args.size() > 3) {
+        reason = args[3];
+        for (size_t i = 4; i < args.size(); ++i)
+            reason += " " + args[i];
+        if (reason[0] == ':')
+            reason = reason.substr(1);
+    }
+
+    std::string kickMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost KICK " +
+                          chanName + " " + targetNick + " :" + reason + "\r\n";
+
+    // Send KICK to all members before removing
+    const std::vector<Client *> &members = channel.getClients();
+    for (size_t i = 0; i < members.size(); ++i) {
+        send(members[i]->getFd(), kickMsg.c_str(), kickMsg.length(), 0);
+    }
+
+    // Remove client from channel
+    channel.removeClient(targetClient);
+
+    // If they were an operator, remove that too
+    
+    //channel.removeOperator(targetClient);
+
+    // If channel is empty, delete it
+    if (channel.isEmpty()) {
+        server.removeChannel(chanName);
     }
 }

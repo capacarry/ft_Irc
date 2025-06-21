@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:35:23 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/20 16:44:57 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:38:31 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class Server
         std::string _password; // server password
         int _socketFd; // listening socket
         static bool _signal; // signal handler (ctrl + c, ctrl + /)
-        std::vector<Client> _clients; // clients vector
+        std::vector<Client *> _clients; // clients vector
         std::map<std::string, Channel> _channels; // channels map
    
     public:
@@ -52,11 +52,14 @@ class Server
         void receiveData(int fd);
         void removeClientFromAllChannels(Client* client);
         Client * getClientByFd(int fd) const;
-
+         Client *getClientByNick(const std::string &nick) const;
         int epollFd; // epoll instance
 
         /*luiberna*/
-        Channel& getOrCreateChannel(const std::string& name);
+        bool hasChannel(const std::string& name) const {
+            return _channels.find(name) != _channels.end();
+        }
+        Channel& getOrCreateChannel(const std::string& name, Client *client);
         void removeChannel(const std::string& name);
-        const std::vector<Client>& getClients() const;
+        const std::vector<Client *>& getClients() const;
 };

@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:43:30 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/20 16:02:39 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:53:58 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ Client::Client()
       _username(""),
       _hasGivenPass(false),
       _isRegistered(false),
-      _serverNeedsPass(false)
+      _serverNeedsPass(false),
+      _isoperator(false)
 {
     std::cout << GRE << B << "Client created" << R << std::endl;
 }
