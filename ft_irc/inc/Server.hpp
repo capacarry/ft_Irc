@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:35:23 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/21 18:38:31 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/21 19:18:36 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ class Server
         Client * getClientByFd(int fd) const;
          Client *getClientByNick(const std::string &nick) const;
         int epollFd; // epoll instance
-
+        std::map<std::string, Channel> getChannels() const { return _channels; }
         /*luiberna*/
         bool hasChannel(const std::string& name) const {
             return _channels.find(name) != _channels.end();

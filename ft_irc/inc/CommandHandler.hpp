@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:51:08 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/21 17:55:26 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:37:20 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ namespace CommandHandler {
     void handleQuit(Server &server, Client &client, const std::vector<std::string> &args);
     void handlePart(Server &server, Client &client, const std::vector<std::string> &args);
     void handleKick(Server &server, Client &client, const std::vector<std::string> &args);
+    void handleTopic(Server &server, Client &client, const std::vector<std::string> &args);
+    void handleInvite(Server &server, Client &client, const std::vector<std::string> &args);
+    void handleMode(Server &server, Client &client, const std::vector<std::string> &args);
+    void handleKill(Server &server, Client &client, const std::vector<std::string> &args);  
     bool notDuplicateNickname(Server &server, const std::string &nickname);
     bool notDuplicateUsername(Server &server, const std::string &username);
 }

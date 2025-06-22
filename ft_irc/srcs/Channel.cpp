@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:45:36 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/21 18:25:31 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:46:28 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ Channel::Channel() {
 }
 
 Channel::Channel(const std::string& name , Client *client): _name(name) {
+    setInviteOnly(false);
     std::cout << GRE << B << "Channel created with name: " << _name << R << std::endl;
     makeOperator(client);
 }
@@ -79,10 +80,10 @@ void Channel::makeOperator(Client *client) {
     std::cout << GRE << B << "Client " << client->getNickname() << " is now an operator in general" << _name << R << std::endl;
     _operators.push_back(client); //adds the client to the list of operators
     // Notify all clients in the channel that the client has been made an operator
-    std::string msg = ":" + client->getNickname() + "!" + client->getUsername() + "@localhost MODE " + _name + " +o " + client->getNickname() + "\r\n";
-    for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-            send((*it)->getFd(), msg.c_str(), msg.length(), 0);
-        }
+   // std::string msg = ":" + client->getNickname() + "!" + client->getUsername() + "@localhost MODE " + _name + " +o " + client->getNickname() + "\r\n";
+    // for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+    //         send((*it)->getFd(), msg.c_str(), msg.length(), 0);
+    //     }
 }
 
 void Channel::removeOperator(Client *client) {

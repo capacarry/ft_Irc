@@ -1,90 +1,88 @@
-Client <5>: CAP LS 302
+Client <5>: sad
 
-Client <5>: CAP LS 302
+Client <5>: /NICK GUI
 
-Client <5>: CAP LS 302
+Client <5>: /NICK
 
-Client <5>: CAP LS 302
+Client <5>: PASS pass
 
-Client <5>: CAP LS 302
+Client <5>: JOIN all
 
-Client <5>: CAP LS 302
+Client <5>: NICK gui
 
-Client <5>: JOIN :
+Client <5>: USER gui1
 
-Client <5>: PASS mamas
+Client <5>: JOIN all
 
-Client <5>: NICK capa
-USER capa capa localhost :Gui
+Client <5>: PASS pass
 
-Client <5>: MODE capa +i
+Client <5>: hey
 
-Client <5>: JOIN #all
+Client <5>: USER gui
 
-Client <5>: PART #all
+Client <5>: NICK gui1
 
-Client <5>: MODE #all
+Client <5>: h
 
-Client <5>: QUIT :leaving
+Client <5>: PASS pass
 
-Client <5>: CAP LS 302
-JOIN :
+Client <5>: USER gui1
 
-Client <5>: NICK capa
+Client <5>: NICK gui2
 
-Client <5>: USER capa capa localhost :Gui
+Client <5>: JOIN all
 
-Client <5>: MODE capa +i
+Client <5>: ASD
 
-Client <5>: PING irc.42.local
+Client <5>: PASS pass
 
-Client <5>: JOIN #all
+Client <5>: 
 
-Client <5>: MODE #all
+Client <5>: NICK gui
 
-Client <5>: PART #all
+Client <5>: USER gui1 0 * :REAL Name
 
-Client <5>: PART #all
+Client <5>: JOIN all
 
-Client <5>: PART #all
+Client <5>: PASS pass
 
-Client <5>: QUIT :leaving
+Client <5>: NICK gui
 
-Client <5>: CAP LS 302
-PASS mamas
-NICK lol
-USER lol4 0 * :realname
+Client <5>: USER user
 
-Client <5>: pass
+Client <5>: USER user
 
-Client <5>: Pass
+Client <5>: USER min
 
-Client <5>: PASS
+Client <5>: PASS pass
 
-Client <5>: QUIT :Leaving
+Client <5>: USER usr
 
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
+Client <5>: NICK gui
 
-Client <5>: QUIT :Leaving
+Client <5>: /join all
 
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
+Client <5>: JOIN all
 
-Client <5>: PASS
+Client <5>: hey
 
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
+Client <5>: bitch
 
-Client <5>: QUIT :Leaving
+Client <5>: TOPIC mamas
+
+Client <5>: TOPIC
+
+Client <5>: TOPIC #all mamas
+
+Client <5>: MODE #all +t
 
 Client <5>: CAP LS 302
 PASS mamas
-NICK lol
-USER lol4 0 * :realname
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
 
 Client <5>: JOIN all
 
@@ -92,642 +90,62 @@ Client <5>: MODE #all
 
 Client <5>: WHO #all
 
-Client <5>: PART #all :Leaving
-
-Client <5>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: JOIN all
-
-Client <5>: JOIN all
-
-Client <5>: PASS
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK lol
-USER lol4 0 * :realname
-
-Client <5>: JOIN fodase
-
-Client <5>: MODE #fodase
-
-Client <5>: WHO #fodase
-
-Client <5>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamasasdasd
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: CAP LS 302
-PASS mamasasdasd
-
-Client <5>: CAP LS 302
-PASS mamasasdasd
-
-Client <5>: CAP LS 302
-PASS mamasasdasd
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: CAP LS 302
-PASS mamasasdasd
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: pass
-
-Client <5>: PASS
-
-Client <5>: PASS mamas
-
-Client <5>: JOIN all
-
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: PASS mamas
-
-Client <5>: JOIN hey
-
-Client <5>: JOIN heyasd
-
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: pass mamas
-
-Client <5>: PASS mamas
-
-Client <5>: JOIN hey
+Client <5>: PRIVMSG #all :hey
 
 Client <5>: QUIT :Leaving
 
 Client <5>: CAP LS 302
 PASS mamas
-NICK lol
-USER lol4 0 * :realname
+NICK gui
+USER gui3 0 * :realname
 
-Client <5>: QUIT :Leaving
+Client <5>: MODE  
 
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
+Client <5>: MODE +o 
 
-Client <5>: CAP LS 302
-NICK lol
-USER lol4 0 * :realname
+Client <5>: MODE #all +o
 
-Client <5>: CAP LS 302
-PASS mamas
+Client <5>: JOIN ALL
 
-Client <5>: NICK lol
-USER lol4 0 * :realname
+Client <5>: MODE #ALL
 
-Client <5>: QUIT :Leaving
+Client <5>: WHO #ALL
 
-Client <5>: CAP LS 302
-PASS dasdasd
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: CAP LS 302
-PASS dasdasd
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: CAP LS 302
-PASS dasdasd
-NICK lol
-USER lol4 0 * :realname
-
-Client <5>: CAP LS 302
-JOIN :
-
-Client <5>: CAP LS 302
-
-Client <5>: JOIN :
-
-Client <5>: CAP LS 302
-JOIN :
-
-Client <5>: CAP LS 302
-
-Client <5>: JOIN :
-
-Client <5>: CAP LS 302
-
-Client <5>: JOIN :
-
-Client <5>: CAP LS 302
-PASS dasdasd
-NICK lol
-USER lol4 0 * :realname
+Client <5>: KILL gui :ds
 
 Client <5>: CAP LS 302
 PASS mamas
-
-Client <5>: NICK lol
-USER lol4 0 * :realname
-
-Client <5>: JOIN all
-
-Client <5>: MODE #all
-
-Client <5>: WHO #all
-
-Client <6>: CAP LS 302
-
-Client <6>: JOIN :
-
-Client <6>: CAP LS 302
-JOIN :
-
-Client <6>: CAP LS 302
-JOIN :
-
-Client <6>: CAP LS 302
-
-Client <6>: JOIN :
-
-Client <6>: CAP LS 302
-
-Client <6>: JOIN :
-
-Client <6>: CAP LS 302
-JOIN :
+NICK gui
+USER gui3 0 * :realname
 
 Client <5>: CAP LS 302
 PASS mamas
-
-Client <5>: NICK lol
-USER lol4 0 * :realname
-
-Client <5>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK lol
-USER lol4 0 * :realname
-
-Client <6>: CAP LS 302
-PASS mamas
-
-Client <6>: NICK banana
-USER banana4 0 * :realname
-
-Client <6>: PRIVMSG 
-
-Client <6>: PRIVMS
-
-Client <6>: PRIVMSG lol fodase
-
-Client <5>: JOIN hey
-
-Client <5>: MODE #hey
-
-Client <5>: WHO #hey
-
-Client <6>: JOIN hey
-
-Client <6>: MODE #hey
-
-Client <6>: WHO #hey
-
-Client <6>: PRIVMSG #hey :dsa
-
-Client <5>: PRIVMSG #hey :ga
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK lol
-USER lol4 0 * :realname
-
-Client <6>: CAP LS 302
+NICK gui
+USER gui3 0 * :realname
 
 Client <6>: PASS mamas
-NICK banana
-USER banana4 0 * :realname
+
+Client <6>: NICK gui
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <6>: USER usr
+
+Client <6>: JOIN all
+
+Client <6>: 
+
+Client <6>: PASS mamas
+
+Client <6>: NICK lol
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
 
 Client <5>: QUIT :Leaving
-
-Client <6>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK banana
-USER banana4 0 * :realname
-
-Client <5>: JOIN lilo
-
-Client <5>: MODE #lilo
-
-Client <5>: WHO #lilo
-
-Client <6>: CAP LS 302
-PASS mamas
-NICK mario
-USER mario4 0 * :realname
-
-Client <6>: JOIN lilo
-
-Client <6>: MODE #lilo
-
-Client <6>: WHO #lilo
-
-Client <6>: PRIVMSG #lilo :sda
-
-Client <5>: PRIVMSG #lilo :gaga
-
-Client <5>: QUIT :Leaving
-
-Client <6>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK mario
-USER mario4 0 * :realname
-
-Client <5>: JOIN all
-
-Client <5>: MODE #all
-
-Client <5>: WHO #all
-
-Client <5>: PART #all :Leaving
-
-Client <5>: JOIN all
-
-Client <5>: MODE #all
-
-Client <5>: WHO #all
-
-Client <5>: PART #all :Leaving
-
-Client <5>: JOIN pila
-
-Client <5>: MODE #pila
-
-Client <5>: WHO #pila
-
-Client <5>: PART #pila :Leaving
-
-Client <5>: JOIN pila
-
-Client <5>: MODE #pila
-
-Client <5>: WHO #pila
-
-Client <6>: CAP LS 302
-PASS mamas
-NICK bruno
-USER burno4 0 * :realname
-
-Client <6>: JOIN pila
-
-Client <6>: MODE #pila
-
-Client <6>: WHO #pila
-
-Client <6>: PART #pila :Leaving
-
-Client <5>: PRIVMSG #pila :dgds
-
-Client <5>: PRIVMSG #pila :sdf
-
-Client <5>: PRIVMSG #pila :sdf
-
-Client <5>: PRIVMSG #pila :sdf
-
-Client <5>: PRIVMSG #pila :sdf
-
-Client <5>: PRIVMSG #pila :sdf
-
-Client <5>: PRIVMSG #pila :sdfds
-
-Client <5>: PART #pila :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK bruno
-USER burno4 0 * :realname
-
-Client <5>: JOIN banana
-
-Client <5>: MODE #banana
-
-Client <5>: WHO #banana
-
-Client <5>: JOIN all
-
-Client <5>: MODE #all
-
-Client <5>: WHO #all
-
-Client <5>: PART #banana :sad
-
-Client <5>: PART #all :Leaving
-
-Client <5>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK bruno
-USER bruno4 0 * :realname
-
-Client <5>: JOIN bolas
-
-Client <5>: MODE #bolas
-
-Client <5>: WHO #bolas
-
-Client <6>: CAP LS 302
-PASS mamas
-NICK sofia
-USER sofia3 0 * :realname
-
-Client <6>: JOIN bolas
-
-Client <6>: MODE #bolas
-
-Client <6>: WHO #bolas
-
-Client <5>: PRIVMSG #bolas :hey
-
-Client <6>: PRIVMSG #bolas :hey
-
-Client <6>: CAP LS 302
-PASS mamas
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK bruno
-USER bruno4 0 * :realname
-
-Client <6>: NICK sofia
-USER sofia3 0 * :realname
-
-Client <5>: QUIT :Leaving
-
-Client <6>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK sofia
-USER sofia3 0 * :realname
-
-Client <6>: CAP LS 302
-PASS mamas
-NICK banana
-USER banana3 0 * :realname
-
-Client <6>: JOIN luli
-
-Client <6>: MODE #luli
-
-Client <6>: WHO #luli
-
-Client <5>: JOIN luli
-
-Client <5>: MODE #luli
-
-Client <5>: WHO #luli
-
-Client <6>: PRIVMSG #luli :hey!
-
-Client <5>: PRIVMSG #luli :hey!
-
-Client <6>: QUIT :Leaving
-
-Client <5>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK sofia
-USER sofia3 0 * :realname
-
-Client <5>: JOIN hi
-
-Client <5>: MODE #hi
-
-Client <5>: WHO #hi
-
-Client <5>: KICK #hi sofia
-
-Client <5>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK sofia
-USER sofia3 0 * :realname
-
-Client <5>: JOIN uwu
-
-Client <5>: MODE #uwu
-
-Client <5>: WHO #uwu
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK sofia
-USER sofia3 0 * :realname
-
-Client <5>: JOIN cu
-
-Client <5>: MODE #cu
-
-Client <5>: WHO #cu
-
-Client <5>: KICK #cu sofia
-
-Client <5>: JOIN cu
-
-Client <5>: MODE #cu
-
-Client <5>: WHO #cu
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK sofia
-USER sofia3 0 * :realname
-
-Client <5>: JOIN cudevelha
-
-Client <5>: MODE #cudevelha
-
-Client <5>: WHO #cudevelha
-
-Client <5>: KICK #cudevelha sofia
-
-Client <5>: JOIN manga
-
-Client <5>: MODE #manga
-
-Client <5>: WHO #manga
-
-Client <6>: CAP LS 302
-PASS mamas
-NICK ivo
-USER ivo3 0 * :realname
-
-Client <6>: JOIN manga
-
-Client <6>: MODE #manga
-
-Client <6>: WHO #manga
-
-Client <5>: PRIVMSG #manga :hey
-
-Client <6>: PRIVMSG #manga :hey
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK sofia
-USER sofia3 0 * :realname
-
-Client <6>: CAP LS 302
-PASS mamas
-NICK ivo
-USER ivo3 0 * :realname
-
-Client <5>: QUIT :Leaving
-
-Client <6>: QUIT :Leaving
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK joana
-USER joana3 0 * :realname
-
-Client <5>: JOIN mamada
-
-Client <5>: MODE #mamada
-
-Client <5>: WHO #mamada
-
-Client <6>: CAP LS 302
-PASS mamas
-NICK fred
-USER fred4 0 * :realname
-
-Client <6>: JOIN mamada
-
-Client <6>: MODE #mamada
-
-Client <6>: WHO #mamada
-
-Client <5>: PRIVMSG #mamada :dsg
-
-Client <6>: PRIVMSG #mamada :sg
-
-Client <6>: KICK #mamada joana
-
-Client <6>: KICK #mamada joana :burra
-
-Client <5>: KICK #mamada fred :"cabrão"
-
-Client <6>: JOIN mamada
-
-Client <6>: MODE #mamada
-
-Client <6>: WHO #mamada
-
-Client <5>: KICK #mamada fred
-
-Client <5>: CAP LS 302
-PASS mamas
-NICK fred
-USER fred4 0 * :realname
-
-Client <5>: JOIN tuamae
-
-Client <5>: MODE #tuamae
-
-Client <5>: WHO #tuamae
-
-Client <6>: CAP LS 302
-PASS mamas
-
-Client <6>: NICK joao
-USER joao4 0 * :realname
-
-Client <6>: JOIN tuamae
-
-Client <6>: MODE #tuamae
-
-Client <6>: WHO #tuamae
-
-Client <6>: PRIVMSG #tuamae :adf
-
-Client <5>: PRIVMSG #tuamae :ga
-
-Client <6>: KICK #tuamae fred
-
-Client <5>: KICK #tuamae d
-
-Client <5>: KICK #tuamae das :asd
-
-Client <5>: KICK #tuamae fred :cona
-
-Client <5>: JOIN tuamae
-
-Client <5>: MODE #tuamae
-
-Client <5>: WHO #tuamae
-
-Client <5>: KICK #tuamae joao
-
-Client <5>: CAP LS 302
-PASS mamas
-
-Client <5>: NICK joao
-USER joao4 0 * :realname
-
-Client <6>: CAP LS 302
-PASS mamas
-
-Client <6>: NICK lilo
-USER lilo4 0 * :realname
-
-Client <6>: JOIN tua
-
-Client <6>: MODE #tua
-
-Client <6>: WHO #tua
-
-Client <5>: JOIN tua
-
-Client <5>: MODE #tua
-
-Client <5>: WHO #tua
-
-Client <5>: KICK #tua lilo
-
-Client <5>: KICK #tua lilo
-
-Client <5>: KICK #tua lilo
-
-Client <6>: KICK #tua joao
-
-Client <5>: QUIT :Leaving
-
-Client <6>: QUIT :Leaving
 

@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:50:54 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/21 18:38:38 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:52:59 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ void Server::closeEvent(int fd)
     for (size_t i = 0; i < _clients.size(); ++i) 
     {
         if (_clients[i]->getFd() == fd)
-        {
+        {   
+            delete _clients[i]; 
             _clients.erase(_clients.begin() + i);
             break;
         }
@@ -153,6 +154,7 @@ void Server::closeAll()
         epoll_ctl(epollFd, EPOLL_CTL_DEL, _clients[i]->getFd(), NULL);
         std::cout << YEL << B << "Closing client socket: " << _clients[i]->getFd() << R << std::endl;
         close(_clients[i]->getFd()); // close client socket
+         delete _clients[i]; 
         _clients.erase(_clients.begin() + i); // remove client from vector
         i++;
     }

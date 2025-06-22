@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:36:03 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/21 17:55:12 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:24:39 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class Client
         bool _isRegistered; // client registration status
         bool _serverNeedsPass; // server needs password
         bool _isoperator; // client is operator
+        std::vector<std::string> _invites;
     
     public:
         Client();
@@ -52,4 +53,8 @@ class Client
         void tryRegister();
         void setIsOperator(bool isOperator) { _isoperator = isOperator; }
         bool isOperator() const { return _isoperator; }
+        void addInvite(const std::string &channelName) {
+            _invites.push_back(channelName);
+        }
+        const std::vector<std::string>& getInvites() const { return _invites; }
 };
