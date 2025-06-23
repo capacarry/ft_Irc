@@ -1,96 +1,15 @@
-Client <5>: sad
-
-Client <5>: /NICK GUI
-
-Client <5>: /NICK
-
-Client <5>: PASS pass
-
-Client <5>: JOIN all
-
-Client <5>: NICK gui
-
-Client <5>: USER gui1
-
-Client <5>: JOIN all
-
-Client <5>: PASS pass
-
-Client <5>: hey
-
-Client <5>: USER gui
-
-Client <5>: NICK gui1
-
-Client <5>: h
-
-Client <5>: PASS pass
-
-Client <5>: USER gui1
-
-Client <5>: NICK gui2
-
-Client <5>: JOIN all
-
-Client <5>: ASD
-
-Client <5>: PASS pass
-
-Client <5>: 
-
-Client <5>: NICK gui
-
-Client <5>: USER gui1 0 * :REAL Name
-
-Client <5>: JOIN all
-
-Client <5>: PASS pass
-
-Client <5>: NICK gui
-
-Client <5>: USER user
-
-Client <5>: USER user
-
-Client <5>: USER min
-
-Client <5>: PASS pass
-
-Client <5>: USER usr
-
-Client <5>: NICK gui
-
-Client <5>: /join all
-
-Client <5>: JOIN all
-
-Client <5>: hey
-
-Client <5>: bitch
-
-Client <5>: TOPIC mamas
-
-Client <5>: TOPIC
-
-Client <5>: TOPIC #all mamas
-
-Client <5>: MODE #all +t
-
-Client <5>: CAP LS 302
-PASS mamas
-
 Client <5>: CAP LS 302
 PASS mamas
 NICK gui
 USER gui3 0 * :realname
 
-Client <5>: JOIN all
+Client <5>: JOIN s
 
-Client <5>: MODE #all
+Client <5>: JOIN s
 
-Client <5>: WHO #all
+Client <5>: JOIN e
 
-Client <5>: PRIVMSG #all :hey
+Client <5>: JOIN e s
 
 Client <5>: QUIT :Leaving
 
@@ -99,53 +18,618 @@ PASS mamas
 NICK gui
 USER gui3 0 * :realname
 
-Client <5>: MODE  
-
-Client <5>: MODE +o 
-
-Client <5>: MODE #all +o
-
-Client <5>: JOIN ALL
-
-Client <5>: MODE #ALL
-
-Client <5>: WHO #ALL
-
-Client <5>: KILL gui :ds
+Client <5>: JOIN all
 
 Client <5>: CAP LS 302
 PASS mamas
 NICK gui
 USER gui3 0 * :realname
 
-Client <5>: CAP LS 302
-PASS mamas
-NICK gui
-USER gui3 0 * :realname
+Client <5>: JOIN hey
 
-Client <6>: PASS mamas
+Client <5>: MODE #hey
 
-Client <6>: NICK gui
+Client <5>: WHO #hey
 
-Client <5>: CAP LS 302
-PASS mamas
-NICK gui
-USER gui3 0 * :realname
+Client <5>: POLL
 
-Client <6>: USER usr
-
-Client <6>: JOIN all
-
-Client <6>: 
-
-Client <6>: PASS mamas
-
-Client <6>: NICK lol
+Client <5>: QUIT :Leaving
 
 Client <5>: CAP LS 302
 PASS mamas
 NICK gui
 USER gui3 0 * :realname
+
+Client <5>: JOIN chan
+
+Client <5>: MODE #chan
+
+Client <5>: WHO #chan
+
+Client <5>: POLL
+
+Client <5>: POLL best benfica sporting
+
+Client <5>: PRIVMSG #chan :af
+
+Client <5>: PRIVMSG #chan :fsdf
+
+Client <5>: VOTE
+
+Client <5>: VOTE benfica
+
+Client <5>: VOTE sporting
+
+Client <5>: POLL
+
+Client <5>: POLL D
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN u
+
+Client <5>: MODE #u
+
+Client <5>: WHO #u
+
+Client <5>: PRIVMSG #u :POLL
+
+Client <5>: POLL
+
+Client <5>: POLL melhor sporting benfica
+
+Client <5>: POLL melhor
+
+Client <5>: POLL
+
+Client <5>: POLL "melhor"
+
+Client <5>: VOTE benfica
+
+Client <5>: VOTE BENFICA
+
+Client <5>: POLL picha
+
+Client <5>: POLL picha m n
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN m
+
+Client <5>: MODE #m
+
+Client <5>: WHO #m
+
+Client <5>: POLL
+
+Client <5>: POLL best  1 2
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN y
+
+Client <5>: MODE #y
+
+Client <5>: WHO #y
+
+Client <5>: POLL
+
+Client <5>: POLL k
+
+Client <5>: POLL k k l
+
+Client <5>: VOTE l
+
+Client <5>: VOTE l
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN a
+
+Client <5>: MODE #a
+
+Client <5>: WHO #a
+
+Client <5>: POLL
+
+Client <5>: POLL a i o
+
+Client <5>: VOTE i
+
+Client <5>: POLL a
+
+Client <5>: POLL a
+
+Client <5>: POLL a S
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN i
+
+Client <5>: MODE #i
+
+Client <5>: WHO #i
+
+Client <5>: POLL
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: POLL
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: POLL S
+
+Client <5>: POLL
+
+Client <5>: POLL
+
+Client <5>: POLL
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN m
+
+Client <5>: MODE #m
+
+Client <5>: WHO #m
+
+Client <5>: POLL melhor benfica sporting 
+
+Client <5>: VOTE sporting
+
+Client <5>: VOTE benfica
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN e
+
+Client <5>: MODE #e
+
+Client <5>: WHO #e
+
+Client <5>: POLL
+
+Client <5>: POLL U I O
+
+Client <5>: VOTE I
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN l
+
+Client <5>: MODE #l
+
+Client <5>: WHO #l
+
+Client <5>: POLL
+
+Client <5>: POLL A I O
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN p
+
+Client <5>: MODE #p
+
+Client <5>: WHO #p
+
+Client <5>: POLL
+
+Client <5>: POLL best s o
+
+Client <5>: VOTE s
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN mimi
+
+Client <5>: MODE #mimi
+
+Client <5>: WHO #mimi
+
+Client <5>: POLL
+
+Client <5>: POLL i o p
+
+Client <6>: CAP LS 302
+PASS mamas
+NICK nana
+USER nana3 0 * :realname
+
+Client <6>: JOIN mimi
+
+Client <6>: MODE #mimi
+
+Client <6>: WHO #mimi
+
+Client <6>: VOTE p
+
+Client <5>: vote o
+
+Client <5>: VOTE o
+
+Client <6>: WHOIS nana nana
+
+Client <6>: WHOIS nana nana
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN q
+
+Client <5>: MODE #q
+
+Client <5>: WHO #q
+
+Client <5>: POLL
+
+Client <5>: POLL "a nana curte do gui" sim nao
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN luli
+
+Client <5>: MODE #luli
+
+Client <5>: WHO #luli
+
+Client <5>: POLL "nana é fixe?" sim nao
+
+Client <5>: VOTE sim
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN cocoxixi
+
+Client <5>: MODE #cocoxixi
+
+Client <5>: WHO #cocoxixi
+
+Client <5>: POLL "nana é fixe?" sim nao
+
+Client <5>: POLL
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN cocoxixi
+
+Client <5>: MODE #cocoxixi
+
+Client <5>: WHO #cocoxixi
+
+Client <5>: POLL "curtes de piça?" sim nao
+
+Client <5>: vote de
+
+Client <5>: VOTE de
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN sexo
+
+Client <5>: MODE #sexo
+
+Client <5>: WHO #sexo
+
+Client <5>: VOTE "mamas ou cu?" mamas cu
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN cona
+
+Client <5>: MODE #cona
+
+Client <5>: WHO #cona
+
+Client <5>: POLL "curtes de pixa" sim nao
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN putas e
+
+Client <5>: MODE #putas
+
+Client <5>: WHO #putas
+
+Client <5>: TOPIC #putas :cenas 
+
+Client <5>: MODE #putas +t
+
+Client <5>: POLL
+
+Client <5>: POLL "quem curte de ganza?" EU NEPIA
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN "putas e
+
+Client <5>: MODE #putas
+
+Client <5>: WHO #putas
+
+Client <5>: POLL "curtimos de putas?"
+
+Client <5>: POLL "curtimos de putas?"
+
+Client <5>: POLL "clube"
+
+Client <5>: POLL "clube" s d
+
+Client <5>: VOTE d
+
+Client <5>: POLL "mamas ou nao?" sim nao
+
+Client <5>: PART #putas :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN grupo
+
+Client <5>: MODE #grupo
+
+Client <5>: WHO #grupo
+
+Client <5>: TOPIC #grupo :merdas importantes
+
+Client <6>: CAP LS 302
+PASS mamas
+
+Client <6>: NICK mario
+USER mario3 0 * :realname
+
+Client <6>: JOIN grupo
+
+Client <6>: MODE #grupo
+
+Client <6>: WHO #grupo
+
+Client <5>: POLL "quem tem mamas maiores nana ou sidney sweeney?" nana sidney 
+
+Client <5>: VOTE nana
+
+Client <6>: VOTE sidney
+
+Client <5>: POLL "fodase" n j
+
+Client <5>: POLL fodase
+
+Client <5>: VOTE n
+
+Client <6>: VOTE N
+
+Client <6>: VOTE n
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN grupo1
+
+Client <5>: MODE #grupo1
+
+Client <5>: WHO #grupo1
+
+Client <6>: CAP LS 302
+PASS mamas
+NICK nana
+USER nana3 0 * :realname
+
+Client <6>: JOIN grupo1
+
+Client <6>: MODE #grupo1
+
+Client <6>: WHO #grupo1
+
+Client <6>: POLL
+
+Client <6>: POLL S D F
+
+Client <5>: POLL "who the baddest" nicky cardi
+
+Client <6>: VOTE l
+
+Client <6>: VOTE nicky
+
+Client <6>: VOTE nicky
+
+Client <5>: VOTE nicky
+
+Client <5>: CAP LS 302
+PASS mamas
+
+Client <5>: NICK gui
+USER gui3 0 * :realname
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN nigger
+
+Client <5>: MODE #nigger
+
+Client <5>: WHO #nigger
+
+Client <5>: POLL bitch lol lil
+
+Client <5>: VOTE
+
+Client <5>: VOTE l
+
+Client <5>: QUIT :Leaving
+
+Client <5>: CAP LS 302
+PASS mamas
+NICK gui
+USER gui3 0 * :realname
+
+Client <5>: JOIN canal
+
+Client <5>: MODE #canal
+
+Client <5>: WHO #canal
+
+Client <6>: CAP LS 302
+PASS mamas
+NICK nana
+USER nana3 0 * :realname
+
+Client <5>: MODE #canal +i
+
+Client <6>: JOIN canal
+
+Client <5>: INVITE #canal nana
+
+Client <5>: INVITE nana #canal
+
+Client <6>: JOIN canal
+
+Client <6>: MODE #canal
+
+Client <6>: WHO #canal
+
+Client <5>: KICK #canal nana :burra
+
+Client <6>: JOIN canal
+
+Client <6>: MODE #canal
+
+Client <6>: WHO #canal
+
+Client <6>: PART #canal :Leaving
+
+Client <5>: MODE #canal +k
+
+Client <5>: MODE #canal +k pass
+
+Client <6>: JOIN canal
+
+Client <6>: JOIN canal pass
+
+Client <6>: MODE #canal
+
+Client <6>: WHO #canal
+
+Client <5>: MODE #canal +o nana
+
+Client <6>: KICK #canal gui
+
+Client <5>: JOIN canal
+
+Client <5>: JOIN canal pass
+
+Client <5>: MODE #canal
+
+Client <5>: WHO #canal
+
+Client <5>: PRIVMSG #canal :bitch
+
+Client <6>: PRIVMSG #canal :fodase
+
+Client <6>: QUIT :Leaving
 
 Client <5>: QUIT :Leaving
 

@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:47:17 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/22 17:12:50 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:33:57 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ private:
     std::string _channelKey;
     bool _hasLimit;
     size_t userLimit;
+    bool _hasPoll;
     std::vector<Client*> _clients;
     std::vector<Client*> _operators;
+    std::map<std::string,int>  _pollOptions;
     
     
 public:
@@ -60,5 +62,19 @@ public:
     bool hasUserLimit() const { return _hasLimit; }
     void setUserLimit(size_t limit) { userLimit = limit; _hasLimit = true; }
     size_t getUserLimit() const { return userLimit; }
+    void createPoll(const std::string& title, const std::map<std::string, int>& options);
+    bool hasPoll() const { return _hasPoll; }
+    void setHasPoll(bool hasPoll) { _hasPoll = hasPoll; }
+    void setPollOptions(const std::map<std::string, int>& options) { _pollOptions = options; }
+    size_t getVotedClientsCount() const;
+    std::map<std::string, int> getPollOptions() const { return _pollOptions; }
+    void createPoll(const std::string& title, const std::vector<std::string>& options);
+    void closeAndResetPoll();
+    void vote(Client& client, const std::string& option);
+    void resetVotedClientsCount() {
+    for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+        (*it)->setHasVoted(false);
+    }
+    }
 };
 

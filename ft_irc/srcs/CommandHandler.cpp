@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:52:41 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/22 18:47:41 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:37:50 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,27 @@
 #include <algorithm>
 
 static std::vector<std::string> split(const std::string &str) {
-    std::istringstream iss(str);
     std::vector<std::string> tokens;
     std::string token;
-    
-    while (iss >> token)
+    bool inQuotes = false;
+    for (size_t i = 0; i < str.length(); ++i) {
+        char c = str[i];
+        if (c == '"') {
+            inQuotes = !inQuotes;
+            if (!inQuotes && !token.empty()) {
+                tokens.push_back(token);
+                token.clear();
+            }
+        } else if (c == ' ' && !inQuotes) {
+            if (!token.empty()) {
+                tokens.push_back(token);
+                token.clear();
+            }
+        } else {
+            token += c;
+        }
+    }
+    if (!token.empty())
         tokens.push_back(token);
     return tokens;
 }
@@ -83,7 +99,14 @@ void CommandHandler::handleCommand(Server &server, Client &client, const std::st
 
     // Post-registration commands
     if (client.isRegistered()) {
-        if(cmd == "KILL"){
+        //para VOTE  e POLL  user /raw POLL ou /raw VOTE
+        if(cmd == "VOTE"){
+            handleVote(server, client, args);
+        } else if(cmd == "POLL"){
+            handlePoll(server, client, args);
+        } else if(cmd == "NOTICE"){
+            handleNotice(server, client, args);
+        }else if(cmd == "KILL"){
             handleKill(server, client, args);
         } else if(cmd == "INVITE"){
             handleInvite(server, client, args);
@@ -104,6 +127,45 @@ void CommandHandler::handleCommand(Server &server, Client &client, const std::st
         } else {
             std::cerr << "Unknown command: " << cmd << std::endl;
         }
+    }
+}
+
+void CommandHandler::handleNotice(Server &server, Client &client, const std::vector<std::string> &args) {
+    if (args.size() < 3) {
+        std::string error = ":irc.42.local 461 " + client.getNickname() + " NOTICE :Not enough parameters\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    std::string target = args[1];
+    std::string message = args[2];
+    for (size_t i = 3; i < args.size(); ++i) {
+        message += " " + args[i];
+    }
+
+    if (target[0] == '#') { // Channel notice
+        if (!server.hasChannel(target)) {
+            std::string error = ":irc.42.local 403 " + client.getNickname() + " " + target + " :No such channel\r\n";
+            send(client.getFd(), error.c_str(), error.length(), 0);
+            return;
+        }
+        Channel &channel = server.getOrCreateChannel(target, &client);
+        const std::vector<Client*>& members = channel.getClients();
+        for (size_t i = 0; i < members.size(); ++i) {
+            std::string noticeMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NOTICE " +
+                                    target + " :" + message + "\r\n";
+            send(members[i]->getFd(), noticeMsg.c_str(), noticeMsg.length(), 0);
+        }
+    } else { // Private notice
+        Client *targetClient = server.getClientByNick(target);
+        if (!targetClient) {
+            std::string error = ":irc.42.local 401 " + client.getNickname() + " " + target + " :No such nick/channel\r\n";
+            send(client.getFd(), error.c_str(), error.length(), 0);
+            return;
+        }
+        std::string noticeMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NOTICE " +
+                                targetClient->getNickname() + " :" + message + "\r\n";
+        send(targetClient->getFd(), noticeMsg.c_str(), noticeMsg.length(), 0);
     }
 }
 
@@ -372,7 +434,8 @@ void CommandHandler::handlePart(Server &server, Client &client, const std::vecto
     
     // Remove client from the channel
     channel.removeClient(&client);
-
+    std::string emptyChannel = "";
+    client.setChannel(emptyChannel); // Clear the client's channel
     // Notify the client
     std::string partMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost PART :" + chanName + "\r\n";
     send(client.getFd(), partMsg.c_str(), partMsg.length(), 0);
@@ -507,6 +570,7 @@ void CommandHandler::handleJoin(Server& server, Client& client, const std::vecto
     }
     // Add client to the channel
     channel.addClient(&client);
+    client.setChannel(chanName);
 
     // Send JOIN message to the client
     std::string joinMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost JOIN :" + chanName + "\r\n";
@@ -676,6 +740,7 @@ void CommandHandler::handleKick(Server &server, Client &client, const std::vecto
 
     // Remove client from channel
     channel.removeClient(targetClient);
+    targetClient->removeInvite(chanName);
 
     // If they were an operator, remove that too
     

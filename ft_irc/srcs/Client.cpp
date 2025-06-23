@@ -6,12 +6,11 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:43:30 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/21 17:53:58 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:18:07 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Client.hpp"
-
 /*----------------------------------------------------------------------------*/
 /* CONSTRUCTOR 🚧 */
 Client::Client()
@@ -82,6 +81,7 @@ bool Client::isRegistered() const
 {
     return _isRegistered;
 }
+
 
 void Client::tryRegister() {
     if(!_nickname.empty() && !_username.empty() && !_serverNeedsPass && !_hasGivenPass) {

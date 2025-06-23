@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:35:23 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/21 19:18:36 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:29:11 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ class Server
         bool hasChannel(const std::string& name) const {
             return _channels.find(name) != _channels.end();
         }
+        Channel & getChannel(const std::string& name);
         Channel& getOrCreateChannel(const std::string& name, Client *client);
         void removeChannel(const std::string& name);
+        void notifyChannelMembers(const std::string& channelName, const std::string& message);
         const std::vector<Client *>& getClients() const;
 };

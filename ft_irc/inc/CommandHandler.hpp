@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:51:08 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/22 18:37:20 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:02:22 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <vector>
 #include "Client.hpp"
 #include "Server.hpp"
+#include "Utils.hpp"
 
 class Server; // forward declaration
 
@@ -32,7 +33,11 @@ namespace CommandHandler {
     void handleTopic(Server &server, Client &client, const std::vector<std::string> &args);
     void handleInvite(Server &server, Client &client, const std::vector<std::string> &args);
     void handleMode(Server &server, Client &client, const std::vector<std::string> &args);
-    void handleKill(Server &server, Client &client, const std::vector<std::string> &args);  
+    void handleKill(Server &server, Client &client, const std::vector<std::string> &args);
+    void handleNotice(Server &server, Client &client, const std::vector<std::string> &args);
+    void handlePoll(Server &server, Client &client, const std::vector<std::string> &args);
+    void createPoll(Server &server, const std::string &title, const std::vector<std::string> &options, const std::string &channelName);
+    void handleVote(Server &server, Client &client, const std::vector<std::string> &args);
     bool notDuplicateNickname(Server &server, const std::string &nickname);
     bool notDuplicateUsername(Server &server, const std::string &username);
 }

@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:50:54 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/06/22 18:52:59 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:29:26 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,6 +374,25 @@ Client *Server::getClientByNick(const std::string &nick) const {
     return NULL; // client not found
 }
 
+void Server::notifyChannelMembers(const std::string& channelName, const std::string& message) {
+    std::map<std::string, Channel>::iterator it = _channels.find(channelName);
+    if (it != _channels.end()) {
+        Channel& channel = it->second;
+        const std::vector<Client*>& clients = channel.getClients();
+        for (size_t i = 0; i < clients.size(); ++i) {
+            clients[i]->sendMessage(message); // send message to each client in the channel
+        }
+    } else {
+        std::cerr << RED << "Channel <" << channelName << "> not found!" << R << std::endl;
+    }
+}
+
+Channel & Server::getChannel(const std::string& name) {
+    std::map<std::string, Channel>::iterator it = _channels.find(name);
+    if (it != _channels.end())
+        return it->second; // return existing channel
+    throw std::runtime_error("Channel not found: " + name); // throw exception if channel not found
+}
 /*----------------------------------------------------------------------------*/
 
 /*luiberna*/
