@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luiberna <luiberna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gude-cas <gude-cas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:36:22 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/05/29 17:10:43 by luiberna         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:24:18 by gude-cas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#define WHI "\e[0;37m" //-> for white color
-#define RED "\e[1;31m" //-> for red color
-#define GRE "\e[1;32m" //-> for green color
-#define BLU "\e[1;34m" //-> for blue color
-#define YEL "\e[1;33m" //-> for yellow color
-#define B   "\e[1m" //-> for bold text
-#define R   "\e[0m" //-> for reset color
+#define WHI "\e[0;37m"
+#define RED "\e[1;31m"
+#define GRE "\e[1;32m"
+#define BLU "\e[1;34m"
+#define YEL "\e[1;33m"
+#define B   "\e[1m"
+#define R   "\e[0m"
 
+#include <map>
 #include <vector>
 #include <cstring>
 #include <cstdlib>
@@ -28,13 +29,6 @@
 #include <sstream>
 #include <signal.h>
 #include <iostream>
+#include <algorithm>
 #include <arpa/inet.h>
 #include <sys/epoll.h>
-#include <map>
-
-// #include <string>
-// #include <errno.h>
-// #include <stdexcept>
-// #include <sys/socket.h>
-// #include <netinet/in.h>
-// #include <unistd.h>

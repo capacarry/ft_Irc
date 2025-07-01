@@ -3,76 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcapa-pe <gcapa-pe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:52:41 by luiberna          #+#    #+#             */
-/*   Updated: 2025/06/23 15:37:50 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:46:19 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/CommandHandler.hpp"
-#include <sstream>
-#include <iostream>
-#include <algorithm>
 
-static std::vector<std::string> split(const std::string &str) {
+static std::vector<std::string> split(const std::string& str)
+{
     std::vector<std::string> tokens;
     std::string token;
     bool inQuotes = false;
-    for (size_t i = 0; i < str.length(); ++i) {
+    for (size_t i = 0; i < str.length(); ++i)
+    {
         char c = str[i];
-        if (c == '"') {
+        if (c == '"')
+        {
             inQuotes = !inQuotes;
-            if (!inQuotes && !token.empty()) {
+            if (!inQuotes && !token.empty())
+            {
                 tokens.push_back(token);
                 token.clear();
             }
-        } else if (c == ' ' && !inQuotes) {
-            if (!token.empty()) {
-                tokens.push_back(token);
-                token.clear();
-            }
-        } else {
-            token += c;
         }
+        else if (c == ' ' && !inQuotes)
+        {
+            if (!token.empty())
+            {
+                tokens.push_back(token);
+                token.clear();
+            }
+        }
+        else
+            token += c;
     }
     if (!token.empty())
         tokens.push_back(token);
     return tokens;
 }
 
-/*ERROS ENCONTRADOS
-
-- Quando um usr sai do server, não dá para dar reconnect*
+/*
+ERROS ENCONTRADOS
+- Quando um user sai do server, não dá para dar reconnect*
 - Quando connectamos através o irss o cliente aparentemente conecta, mas depois diz que não está conectado
-além disto se tentarmos connectar várias vezes o server cria vários clientes a través do mesmo terminal, que não fazem nada.
+além disto se tentarmos connectar várias vezes o server cria vários clientes através do mesmo terminal, que não fazem nada.
 */
 
-void CommandHandler::handleCommand(Server &server, Client &client, const std::string &rawMessage) {
+void CommandHandler::handleCommand(Server& server, Client& client, const std::string& rawMessage)
+{
     std::string clean = rawMessage;
     clean.erase(std::remove(clean.begin(), clean.end(), '\r'), clean.end());
     clean.erase(std::remove(clean.begin(), clean.end(), '\n'), clean.end());
 
-    std::cout << "Raw command received: [" << clean << "]" << std::endl;
+    std::cout << "Raw command received: [" << clean << "]" << "\n";
 
     std::vector<std::string> args = split(clean);
     if (args.empty())
         return;
-
+    
     std::string cmd = args[0];
 
-    // Always allow these
-    if (cmd == "CAP" || cmd == "PING" || cmd == "PONG") {
+    if (cmd == "CAP" || cmd == "PING" || cmd == "PONG")
         return;
-    }
-
-    if (cmd == "PASS") {
+    if (cmd == "PASS")
+    {
         handlePass(server, client, args);
         return;
     }
 
     // If password is required and not given yet, reject further input
-    if (client.getServerNeedsPass() && !client.getHasGivenPass()) {
+    if (client.getServerNeedsPass() && !client.getHasGivenPass())
+    {
         std::string error = ":irc.42.local 464 * :Password required\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         server.closeEvent(client.getFd());
@@ -80,58 +84,66 @@ void CommandHandler::handleCommand(Server &server, Client &client, const std::st
     }
 
     // Not yet registered, allow NICK/USER
-    if (!client.isRegistered()) {
-        if (cmd == "NICK") {
+    if (!client.isRegistered())
+    {
+        if (cmd == "NICK")
             handleNick(server, client, args);
-        } else if (cmd == "USER") {
+        else if (cmd == "USER")
             handleUser(server, client, args);
-        } else {
+        else
+        {
             std::string error = ":irc.42.local 451 * :You have not registered\r\n";
             send(client.getFd(), error.c_str(), error.length(), 0);
             return;
         }
-        std::cout << "nick " << client.getNickname() << " user " << client.getUsername() << std::endl;
-        std::cout << "passed: " << client.getHasGivenPass() << std::endl; 
+        std::cout << "nick " << client.getNickname() << " user " << client.getUsername() << "\n";
+        std::cout << "passed: " << client.getHasGivenPass() << "\n"; 
 
-        client.tryRegister(); // If all pieces are there, this will set isRegistered = true
+        client.tryRegister(); // If all pieces are there, this will set isRegistered to true
         return;
     }
 
     // Post-registration commands
-    if (client.isRegistered()) {
-        //para VOTE  e POLL  user /raw POLL ou /raw VOTE
-        if(cmd == "VOTE"){
+    if (client.isRegistered())
+    {   
+        // para VOTE e POLL user /raw POLL ou /raw VOTE
+        if(cmd == "VOTE")
             handleVote(server, client, args);
-        } else if(cmd == "POLL"){
+        else if(cmd == "POLL")
             handlePoll(server, client, args);
-        } else if(cmd == "NOTICE"){
+        else if(cmd == "NOTICE")
             handleNotice(server, client, args);
-        }else if(cmd == "KILL"){
+        else if(cmd == "KILL")
             handleKill(server, client, args);
-        } else if(cmd == "INVITE"){
+        else if(cmd == "INVITE")
             handleInvite(server, client, args);
-        } else if(cmd == "MODE")
+        else if(cmd == "MODE")
             handleMode(server, client, args);
         else if(cmd == "KICK")
             handleKick(server, client, args);
         else if(cmd == "TOPIC")
             handleTopic(server, client, args);
-        else if (cmd == "JOIN") {
+        else if (cmd == "JOIN")
             handleJoin(server, client, args);
-        } else if (cmd == "PRIVMSG") {
+        else if (cmd == "PRIVMSG")
             handlePrivmsg(server, client, args);
-        } else if (cmd == "QUIT") {
+        else if (cmd == "QUIT")
             handleQuit(server, client, args);
-        } else if (cmd == "PART"){
+        else if (cmd == "PART")
             handlePart(server, client, args);
-        } else {
-            std::cerr << "Unknown command: " << cmd << std::endl;
-        }
+        else
+            {
+                std::string error = ":irc.42.local 421 " + client.getNickname() + " " + cmd + " :Unknown command\r\n";
+                send(client.getFd(), error.c_str(), error.length(), 0);
+                std::cerr << "Unknown command: " << cmd << "\n";
+            }
     }
 }
 
-void CommandHandler::handleNotice(Server &server, Client &client, const std::vector<std::string> &args) {
-    if (args.size() < 3) {
+void CommandHandler::handleNotice(Server& server, Client& client, const std::vector<std::string>& args)
+{
+    if (args.size() < 3)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " NOTICE :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -139,38 +151,45 @@ void CommandHandler::handleNotice(Server &server, Client &client, const std::vec
 
     std::string target = args[1];
     std::string message = args[2];
-    for (size_t i = 3; i < args.size(); ++i) {
+    for (size_t i = 3; i < args.size(); ++i)
         message += " " + args[i];
-    }
-
-    if (target[0] == '#') { // Channel notice
-        if (!server.hasChannel(target)) {
+    
+    if (target[0] == '#')
+    {
+        if (!server.hasChannel(target))
+        {
             std::string error = ":irc.42.local 403 " + client.getNickname() + " " + target + " :No such channel\r\n";
             send(client.getFd(), error.c_str(), error.length(), 0);
             return;
         }
-        Channel &channel = server.getOrCreateChannel(target, &client);
+        Channel& channel = server.getOrCreateChannel(target, &client);
         const std::vector<Client*>& members = channel.getClients();
-        for (size_t i = 0; i < members.size(); ++i) {
+        for (size_t i = 0; i < members.size(); ++i)
+        {
             std::string noticeMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NOTICE " +
                                     target + " :" + message + "\r\n";
             send(members[i]->getFd(), noticeMsg.c_str(), noticeMsg.length(), 0);
         }
-    } else { // Private notice
-        Client *targetClient = server.getClientByNick(target);
-        if (!targetClient) {
+    }
+    else // Private notice
+    {
+        Client* targetClient = server.getClientByNick(target);
+        if (!targetClient)
+        {
             std::string error = ":irc.42.local 401 " + client.getNickname() + " " + target + " :No such nick/channel\r\n";
             send(client.getFd(), error.c_str(), error.length(), 0);
             return;
         }
         std::string noticeMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NOTICE " +
-                                targetClient->getNickname() + " :" + message + "\r\n";
+                                        targetClient->getNickname() + " :" + message + "\r\n";
         send(targetClient->getFd(), noticeMsg.c_str(), noticeMsg.length(), 0);
     }
 }
 
-void CommandHandler::handleKill(Server &server, Client &client, const std::vector<std::string> &args) {
-    if (args.size() < 2) {
+void CommandHandler::handleKill(Server& server, Client& client, const std::vector<std::string>& args)
+{
+    if (args.size() < 2)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " KILL :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -179,14 +198,16 @@ void CommandHandler::handleKill(Server &server, Client &client, const std::vecto
     std::string targetNick = args[1];
     Client *targetClient = server.getClientByNick(targetNick);
 
-    if (!targetClient) {
+    if (!targetClient)
+    {
         std::string error = ":irc.42.local 401 " + client.getNickname() + " " + targetNick + " :No such nick/channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
     // Only allow operators to kill other clients
-    if (!client.isOperator()) {
+    if (!client.isOperator())
+    {
         std::string error = ":irc.42.local 481 " + client.getNickname() + " :Permission Denied - You're not an IRC operator\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -198,8 +219,10 @@ void CommandHandler::handleKill(Server &server, Client &client, const std::vecto
     server.closeEvent(targetClient->getFd());
 }
 
-void CommandHandler::handleMode(Server &server, Client &client, const std::vector<std::string> &args) {
-    if (args.size() < 2) {
+void CommandHandler::handleMode(Server& server, Client& client, const std::vector<std::string>& args)
+{
+    if (args.size() < 2)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " MODE :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -209,29 +232,30 @@ void CommandHandler::handleMode(Server &server, Client &client, const std::vecto
     if (chanName[0] != '#')
         chanName = "#" + chanName;
 
-    if (!server.hasChannel(chanName)) {
+    if (!server.hasChannel(chanName))
+    {
         std::string error = ":irc.42.local 403 " + client.getNickname() + " " + chanName + " :No such channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
-    Channel &channel = server.getOrCreateChannel(chanName, &client);
+    Channel& channel = server.getOrCreateChannel(chanName, &client);
 
     // Check if the client is a channel operator
-    if (!channel.isOperatorInChannel(&client)) {
+    if (!channel.isOperatorInChannel(&client))
+    {
         std::string error = ":irc.42.local 482 " + client.getNickname() + " " + chanName + " :You're not channel operator\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
     // If only channel name, show current modes
-    if (args.size() == 2) {
+    if (args.size() == 2)
+    {
         std::string modesReply = ":irc.42.local 324 " + client.getNickname() + " " + chanName + " :" +
-                                 (channel.isInviteOnly() ? "+i " : "-i ") +
-                                 (channel.isTopicRestricted() ? "+t " : "-t ") +
-                                 (channel.hasKey() ? "+k " : "-k ") +
-                                 (channel.hasUserLimit() ? "+l " : "-l ") +
-                                 channel.getChannelKey() + "\r\n";
+                                (channel.isInviteOnly() ? "+i " : "-i ") + (channel.isTopicRestricted() ? "+t " : "-t ") +
+                                    (channel.hasKey() ? "+k " : "-k ") + (channel.hasUserLimit() ? "+l " : "-l ") +
+                                        channel.getChannelKey() + "\r\n";
         send(client.getFd(), modesReply.c_str(), modesReply.length(), 0);
         return;
     }
@@ -239,53 +263,78 @@ void CommandHandler::handleMode(Server &server, Client &client, const std::vecto
     // Track changes
     std::string modeChanges;
     std::string modeArgs;
-    for (size_t i = 2; i < args.size(); ++i) {
-        if (args[i] == "+i") {
-            if (!channel.isInviteOnly()) {
+    for (size_t i = 2; i < args.size(); ++i)
+    {
+        if (args[i] == "+i")
+        {
+            if (!channel.isInviteOnly())
+            {
                 channel.setInviteOnly(true);
                 modeChanges += "+i ";
             }
-        } else if (args[i] == "-i") {
-            if (channel.isInviteOnly()) {
+        }
+        else if (args[i] == "-i")
+        {
+            if (channel.isInviteOnly())
+            {
                 channel.setInviteOnly(false);
                 modeChanges += "-i ";
             }
-        } else if (args[i] == "+t") {
-            if (!channel.isTopicRestricted()) {
+        }
+        else if (args[i] == "+t")
+        {
+            if (!channel.isTopicRestricted())
+            {
                 channel.setTopicRestricted(true);
                 modeChanges += "+t ";
             }
-        } else if (args[i] == "-t") {
-            if (channel.isTopicRestricted()) {
+        }
+        else if (args[i] == "-t")
+        {
+            if (channel.isTopicRestricted())
+            {
                 channel.setTopicRestricted(false);
                 modeChanges += "-t ";
             }
-        } else if (args[i].size() >= 2 && args[i].substr(0, 2) == "+k") {
-            if (args.size() > i + 1) {
-                if (!channel.hasKey() || channel.getChannelKey() != args[i + 1]) {
+        }
+        else if (args[i].size() >= 2 && args[i].substr(0, 2) == "+k")
+        {
+            if (args.size() > i + 1)
+            {
+                if (!channel.hasKey() || channel.getChannelKey() != args[i + 1])
+                {
                     channel.setHasKey(true);
                     channel.setChannelKey(args[i + 1]);
                     modeChanges += "+k ";
                     modeArgs += args[i + 1] + " ";
                 }
                 ++i;
-            } else {
+            }
+            else
+            {
                 std::string error = ":irc.42.local 461 " + client.getNickname() + " MODE :Not enough parameters\r\n";
                 send(client.getFd(), error.c_str(), error.length(), 0);
                 return;
             }
-        } else if (args[i].size() >= 2 && args[i].substr(0, 2) == "-k") {
-            if (channel.hasKey()) {
+        }
+        else if (args[i].size() >= 2 && args[i].substr(0, 2) == "-k")
+        {
+            if (channel.hasKey())
+            {
                 channel.setHasKey(false);
                 channel.setChannelKey("");
                 modeChanges += "-k ";
             }
-        } else if (args[i].size() >= 2 && args[i].substr(0, 2) == "+l") {
-            if (args.size() > i + 1) {
+        }
+        else if (args[i].size() >= 2 && args[i].substr(0, 2) == "+l")
+        {
+            if (args.size() > i + 1)
+            {
                 std::istringstream iss(args[i + 1]);
                 size_t limit = 0;
                 iss >> limit;
-                if (!channel.hasUserLimit() || channel.getUserLimit() != limit) {
+                if (!channel.hasUserLimit() || channel.getUserLimit() != limit)
+                {
                     channel.setUserLimit(limit);
                     modeChanges += "+l ";
                     std::ostringstream oss;
@@ -293,60 +342,85 @@ void CommandHandler::handleMode(Server &server, Client &client, const std::vecto
                     modeArgs += oss.str() + " ";
                 }
                 ++i;
-            } else {
+            }
+            else
+            {
                 std::string error = ":irc.42.local 461 " + client.getNickname() + " MODE :Not enough parameters\r\n";
                 send(client.getFd(), error.c_str(), error.length(), 0);
                 return;
             }
-        } else if (args[i].size() >= 2 && args[i].substr(0, 2) == "-l") {
-            if (channel.hasUserLimit()) {
+        }
+        else if (args[i].size() >= 2 && args[i].substr(0, 2) == "-l")
+        {
+            if (channel.hasUserLimit())
+            {
                 channel.setUserLimit(0);
                 channel.setUserLimit(false);
                 modeChanges += "-l ";
             }
-        } else if (args[i].size() >= 2 && args[i].substr(0, 2) == "+o") {
+        }
+        else if (args[i].size() >= 2 && args[i].substr(0, 2) == "+o")
+        {
             // +o requires a nick argument
-            if (args.size() > i + 1) {
+            if (args.size() > i + 1)
+            {
                 std::string targetNick = args[i + 1];
                 Client* target = server.getClientByNick(targetNick);
-                if (target && channel.hasClient(target)) {
-                    if (!channel.isOperatorInChannel(target)) {
+                if (target && channel.hasClient(target))
+                {
+                    if (!channel.isOperatorInChannel(target))
+                    {
                         channel.makeOperator(target);
                         modeChanges += "+o ";
                         modeArgs += targetNick + " ";
                     }
-                } else {
+                }
+                else
+                {
                     std::string error = ":irc.42.local 401 " + client.getNickname() + " " + targetNick + " :No such nick/channel\r\n";
                     send(client.getFd(), error.c_str(), error.length(), 0);
                 }
                 ++i;
-            } else {
+            }
+            else
+            {
                 std::string error = ":irc.42.local 461 " + client.getNickname() + " MODE :Not enough parameters\r\n";
                 send(client.getFd(), error.c_str(), error.length(), 0);
                 return;
             }
-        } else if (args[i].size() >= 2 && args[i].substr(0, 2) == "-o") {
+        }
+        else if (args[i].size() >= 2 && args[i].substr(0, 2) == "-o")
+        {
             // -o requires a nick argument
-            if (args.size() > i + 1) {
+            if (args.size() > i + 1)
+            {
                 std::string targetNick = args[i + 1];
                 Client* target = server.getClientByNick(targetNick);
-                if (target && channel.hasClient(target)) {
-                    if (channel.isOperatorInChannel(target)) {
+                if (target && channel.hasClient(target))
+                {
+                    if (channel.isOperatorInChannel(target))
+                    {
                         channel.removeOperator(target);
                         modeChanges += "-o ";
                         modeArgs += targetNick + " ";
                     }
-                } else {
+                }
+                else
+                {
                     std::string error = ":irc.42.local 401 " + client.getNickname() + " " + targetNick + " :No such nick/channel\r\n";
                     send(client.getFd(), error.c_str(), error.length(), 0);
                 }
                 ++i;
-            } else {
+            }
+            else
+            {
                 std::string error = ":irc.42.local 461 " + client.getNickname() + " MODE :Not enough parameters\r\n";
                 send(client.getFd(), error.c_str(), error.length(), 0);
                 return;
             }
-        } else {
+        }
+        else
+        {
             std::string error = ":irc.42.local 472 " + client.getNickname() + " " + args[i] + " :Unknown mode\r\n";
             send(client.getFd(), error.c_str(), error.length(), 0);
             return;
@@ -354,26 +428,19 @@ void CommandHandler::handleMode(Server &server, Client &client, const std::vecto
     }
 
     // Only send mode change if something changed
-    if (!modeChanges.empty()) {
+    if (!modeChanges.empty())
+    {
         std::string modeMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost MODE " + chanName + " " + modeChanges + modeArgs + "\r\n";
         const std::vector<Client*>& members = channel.getClients();
-        for (size_t i = 0; i < members.size(); ++i) {
+        for (size_t i = 0; i < members.size(); ++i)
             send(members[i]->getFd(), modeMsg.c_str(), modeMsg.length(), 0);
-        }
     }
-
-    // Always send the full state to the requesting client
-    // std::string notifyMsg = ":irc.42.local 324 " + client.getNickname() + " " + chanName + " :" +
-    //                         (channel.isInviteOnly() ? "+i " : "-i ") +
-    //                         (channel.isTopicRestricted() ? "+t " : "-t ") +
-    //                         (channel.hasKey() ? "+k " : "-k ") +
-    //                         (channel.hasUserLimit() ? "+l " : "-l ") +
-    //                         channel.getChannelKey() + "\r\n";
-    // send(client.getFd(), notifyMsg.c_str(), notifyMsg.length(), 0);
 }
 
-void CommandHandler::handleInvite(Server &server, Client &client, const std::vector<std::string> &args) {
-    if (args.size() < 3) {
+void CommandHandler::handleInvite(Server& server, Client& client, const std::vector<std::string>& args)
+{
+    if (args.size() < 3)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " INVITE :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -384,43 +451,46 @@ void CommandHandler::handleInvite(Server &server, Client &client, const std::vec
     if (chanName[0] != '#')
         chanName = "#" + chanName;
 
-    if (!server.hasChannel(chanName)) {
+    if (!server.hasChannel(chanName))
+    {
         std::string error = ":irc.42.local 403 " + client.getNickname() + " " + chanName + " :No such channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
-    Channel &channel = server.getOrCreateChannel(chanName, &client);
+    Channel& channel = server.getOrCreateChannel(chanName, &client);
 
     // Check if the client is a channel operator
-    if (!channel.isOperatorInChannel(&client)) {
+    if (!channel.isOperatorInChannel(&client))
+    {
         std::string error = ":irc.42.local 482 " + client.getNickname() + " " + chanName + " :You're not channel operator\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
     Client *targetClient = server.getClientByNick(targetNick);
-    if (!targetClient) {
+    if (!targetClient)
+    {
         std::string error = ":irc.42.local 401 " + client.getNickname() + " " + targetNick + " :No such nick\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
     // Send invite message to the target client
-    std::string inviteMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost INVITE " +
-                            targetNick + " :" + chanName + "\r\n";
+    std::string inviteMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost INVITE " + targetNick + " :" + chanName + "\r\n";
     send(targetClient->getFd(), inviteMsg.c_str(), inviteMsg.length(), 0);
 
     // Notify the inviter
-    std::string notifyMsg = ":irc.42.local 341 " + client.getNickname() + " " + targetNick +
-                            " :" + chanName + "\r\n";
+    std::string notifyMsg = ":irc.42.local 341 " + client.getNickname() + " " + targetNick + " :" + chanName + "\r\n";
     send(client.getFd(), notifyMsg.c_str(), notifyMsg.length(), 0);
-    //Add the invite to the specific channel to the invites channel on the target client
+    // Add the invite to the specific channel -> to the invites channel on the target client
     targetClient->addInvite(chanName);
 }
 
-void CommandHandler::handlePart(Server &server, Client &client, const std::vector<std::string> &args) {
-    if (args.size() < 2) {
+void CommandHandler::handlePart(Server& server, Client& client, const std::vector<std::string>& args)
+{
+    if (args.size() < 2)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " PART :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -430,10 +500,11 @@ void CommandHandler::handlePart(Server &server, Client &client, const std::vecto
     if (chanName[0] != '#')
         chanName = "#" + chanName;
 
-    Channel &channel = server.getOrCreateChannel(chanName, &client);
+    Channel& channel = server.getOrCreateChannel(chanName, &client);
     
     // Remove client from the channel
     channel.removeClient(&client);
+    channel.incrementHowMany(channel.getHowMany() - 1);
     std::string emptyChannel = "";
     client.setChannel(emptyChannel); // Clear the client's channel
     // Notify the client
@@ -442,52 +513,72 @@ void CommandHandler::handlePart(Server &server, Client &client, const std::vecto
 
     // Notify other clients in the channel
     const std::vector<Client*>& members = channel.getClients();
-    for (size_t i = 0; i < members.size(); ++i) {
-        if (members[i]->getFd() != client.getFd()) {
+    for (size_t i = 0; i < members.size(); ++i)
+        if (members[i]->getFd() != client.getFd())
             send(members[i]->getFd(), partMsg.c_str(), partMsg.length(), 0);
-        }
-    }
 
     // If the channel is empty, remove it
-    if (channel.isEmpty()) {
+    if (channel.isEmpty())
         server.removeChannel(chanName);
-    }
 }
 
-void CommandHandler::handleQuit(Server &server, Client &client, const std::vector<std::string> &args) {
+void CommandHandler::handleQuit(Server& server, Client& client, const std::vector<std::string>& args)
+{
     std::string quitMessage = "Client has disconnected";
-    if (args.size() > 1) {
+    if (args.size() > 1)
+    {
         quitMessage = args[1];
-        for (size_t i = 2; i < args.size(); ++i) {
+        for (size_t i = 2; i < args.size(); ++i)
             quitMessage += " " + args[i];
+    }
+
+    std::cout << "QUIT received: " << quitMessage << "\n";
+
+    std::string quitMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost QUIT :" + quitMessage + "\r\n";
+
+    // Notify all channels the client is part of and remove client from them
+    std::map<std::string, Channel> channels = server.getChannels();
+
+    for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); ++it)
+    {
+        Channel& channel = it->second;
+        if (channel.hasClient(&client))
+        {
+            std::vector<Client*> members = channel.getClients();
+            for (size_t i = 0; i < members.size(); ++i)
+            {
+                if (members[i]->getFd() != client.getFd())
+                {
+                    send(members[i]->getFd(), quitMsg.c_str(), quitMsg.length(), 0);
+                }
+            }
+            channel.removeClient(&client);
         }
     }
 
-    std::cout << "QUIT received: " << quitMessage << std::endl;
-
-    // Notify all channels the client is part of
-    server.removeClientFromAllChannels(&client);
-
-    // Send QUIT message to the client
-    std::string quitMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost QUIT :" + quitMessage + "\r\n";
-    send(client.getFd(), quitMsg.c_str(), quitMsg.length(), 0);
-
+    // Remove client from server client list
+    // Assuming you have a method like this:
+    //server.closeEvent(client.getFd());
+    
     // Close the client's socket
     server.closeEvent(client.getFd());
 }
 
 
-void CommandHandler::handlePass(Server &server, Client &client, const std::vector<std::string> &args) 
+
+void CommandHandler::handlePass(Server& server, Client& client, const std::vector<std::string>& args) 
 {   
-    if (args.size() < 2) {
+    if (args.size() < 2)
+    {
         std::string error = ":irc.42.local 461 * PASS :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
-    std::cout << "PASS received: " << args[1] << std::endl;
+    std::cout << "PASS received: " << args[1] << "\n";
 
-    if (args[1] != server.getPassword()) {
+    if (args[1] != server.getPassword())
+    {
         std::string nick = client.getNickname().empty() ? "*" : client.getNickname();
         std::string error = ":irc.42.local 464 " + nick + " :Password incorrect\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
@@ -498,48 +589,50 @@ void CommandHandler::handlePass(Server &server, Client &client, const std::vecto
     client.setHasGivenPass(true);
 }
 
-
-bool CommandHandler::notDuplicateNickname(Server &server, const std::string &nickname) {
+bool CommandHandler::notDuplicateNickname(Server& server, const std::string& nickname)
+{
     const std::vector<Client *> &clients = server.getClients();
-    for (size_t i = 0; i < clients.size(); ++i) {
-        if (clients[i]->getNickname() == nickname) {
+    for (size_t i = 0; i < clients.size(); ++i)
+        if (clients[i]->getNickname() == nickname)
             // Do NOT send error to the existing client or close their connection!
             return false;
-        }
-    }
     return true;
 }
 
-bool CommandHandler::notDuplicateUsername(Server &server, const std::string &username) {
-    const std::vector<Client *> &clients = server.getClients();
-    for (size_t i = 0; i < clients.size(); ++i) {
-        if (clients[i]->getUsername() == username) {
+bool CommandHandler::notDuplicateUsername(Server& server, const std::string& username)
+{
+    const std::vector<Client *>& clients = server.getClients();
+    for (size_t i = 0; i < clients.size(); ++i)
+        if (clients[i]->getUsername() == username)
             // Do NOT send error to the existing client or close their connection!
             return false;
-        }
-    }
     return true;
 }
 
 
-void CommandHandler::handleNick(Server &server, Client &client, const std::vector<std::string> &args) {
+void CommandHandler::handleNick(Server& server, Client& client, const std::vector<std::string>& args)
+{
     if (args.size() >= 2 && !args[1].empty() && notDuplicateNickname(server, args[1]))
         client.setNickname(args[1]);
 }
 
-void CommandHandler::handleUser(Server &server, Client &client, const std::vector<std::string> &args) {
+void CommandHandler::handleUser(Server& server, Client& client, const std::vector<std::string>& args)
+{
     if (!args[1].empty() && notDuplicateUsername(server, args[1]))
-        client.setUsername(args[1]); //Tentar guardar o username
+        client.setUsername(args[1]); // Tentar guardar o username
 }
 
-void CommandHandler::handleJoin(Server& server, Client& client, const std::vector<std::string>& args) {
-    if (args.size() < 2) {
+void CommandHandler::handleJoin(Server& server, Client& client, const std::vector<std::string>& args)
+{   
+    if (args.size() < 2)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " JOIN :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
-    if (!client.isRegistered()) {
+    if (!client.isRegistered())
+    {
         std::string error = ":irc.42.local 451 " + client.getNickname() + " JOIN :You have not registered\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -550,19 +643,39 @@ void CommandHandler::handleJoin(Server& server, Client& client, const std::vecto
         chanName = "#" + chanName;
 
     Channel& channel = server.getOrCreateChannel(chanName, &client);
-    if(channel.hasKey() && args.size() < 3) {
+    std::cout << "Currently in channel :   " << channel.getHowMany() << std::endl;
+    std::vector<Client *> clients = channel.getClients();
+
+    for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        if ((*it)->getUsername() == client.getUsername()) {
+            std::string error = ":irc.42.local 443 " + client.getNickname() + " " + chanName + " :Already in channel\r\n";
+            send(client.getFd(), error.c_str(), error.length(), 0);
+            return;
+        }
+    }
+    if (channel.hasUserLimit() && (channel.getHowMany() == channel.getUserLimit()))
+    {
+        std::string error = ":irc.42.local 477 " + client.getNickname() + " " + chanName + " :Cannot join channel user limit reached (+l)\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+    if (channel.hasKey() && args.size() < 3)
+    {
         std::string error = ":irc.42.local 475 " + client.getNickname() + " " + chanName + " :Cannot join channel (+k)\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
-    if(channel.hasKey() && args[2] != channel.getChannelKey()) {
+    if (channel.hasKey() && args[2] != channel.getChannelKey())
+    {
         std::string error = ":irc.42.local 475 " + client.getNickname() + " " + chanName + " :Cannot join channel password incorrect. (+k)\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
-    if(channel.isInviteOnly() && !channel.isOperatorInChannel(&client)) {
+    if (channel.isInviteOnly() && !channel.isOperatorInChannel(&client))
+    {
         // Check if the client has been invited
-        if (std::find(client.getInvites().begin(), client.getInvites().end(), chanName) == client.getInvites().end()) {
+        if (std::find(client.getInvites().begin(), client.getInvites().end(), chanName) == client.getInvites().end())
+        {
             std::string error = ":irc.42.local 473 " + client.getNickname() + " " + chanName + " :Cannot join channel (+i)\r\n";
             send(client.getFd(), error.c_str(), error.length(), 0);
             return;
@@ -571,19 +684,23 @@ void CommandHandler::handleJoin(Server& server, Client& client, const std::vecto
     // Add client to the channel
     channel.addClient(&client);
     client.setChannel(chanName);
-
+    channel.incrementHowMany(channel.getHowMany() + 1);
     // Send JOIN message to the client
     std::string joinMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost JOIN :" + chanName + "\r\n";
     send(client.getFd(), joinMsg.c_str(), joinMsg.length(), 0);
 
-    // Send TOPIC (332)
-    std::string topic = ":irc.42.local 332 " + client.getNickname() + " " + chanName + " :No topic is set\r\n";
-    send(client.getFd(), topic.c_str(), topic.length(), 0);
+    // manda o notice de topic vazio se nao houver topic
+    if(channel.getTopic().empty())
+    {
+        std::string topic = ":irc.42.local 331 " + client.getNickname() + " " + chanName + " :No topic is set\r\n";
+        send(client.getFd(), topic.c_str(), topic.length(), 0);
+    }
 
     // Send NAMES list (353) with @ for operators
     std::string namesReply = ":irc.42.local 353 " + client.getNickname() + " = " + chanName + " :";
     const std::vector<Client*>& members = channel.getClients();
-    for (size_t i = 0; i < members.size(); ++i) {
+    for (size_t i = 0; i < members.size(); ++i)
+    {
         if (channel.isOperatorInChannel(members[i]))
             namesReply += "@";
         namesReply += members[i]->getNickname();
@@ -598,30 +715,29 @@ void CommandHandler::handleJoin(Server& server, Client& client, const std::vecto
     send(client.getFd(), endNames.c_str(), endNames.length(), 0);
 
     // Broadcast JOIN to other clients in the channel
-    for (size_t i = 0; i < members.size(); ++i) {
-        if (members[i]->getFd() != client.getFd()) {
+    for (size_t i = 0; i < members.size(); ++i)
+        if (members[i]->getFd() != client.getFd())
             send(members[i]->getFd(), joinMsg.c_str(), joinMsg.length(), 0);
-        }
-    }
 
     // Send MODE message to all clients in the channel if the joining client is now an operator
-    if (channel.isOperatorInChannel(&client)) {
+    if (channel.isOperatorInChannel(&client))
+    {
         std::string modeMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost MODE " + chanName + " +o " + client.getNickname() + "\r\n";
-        for (size_t i = 0; i < members.size(); ++i) {
+        for (size_t i = 0; i < members.size(); ++i)
             send(members[i]->getFd(), modeMsg.c_str(), modeMsg.length(), 0);
-        }
     }
 }
 
-
-void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::vector<std::string>& args) {
-    
-    if(!sender.isRegistered()) {
+void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::vector<std::string>& args)
+{    
+    if(!sender.isRegistered())
+    {
         std::string error = ":irc.42.local 451 " + sender.getNickname() + " PRIVMSG :You have not registered\r\n";
         send(sender.getFd(), error.c_str(), error.length(), 0);
         return;
     }
-    if (args.size() < 3) {
+    if (args.size() < 3)
+    {
         std::string error = ":irc.42.local 461 " + sender.getNickname() + " PRIVMSG :Not enough parameters\r\n";
         send(sender.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -629,8 +745,9 @@ void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::ve
     std::string target = args[1];
     std::string message;
 
-    // Concatena todas as partes da mensagem
-    for (size_t i = 2; i < args.size(); ++i) {
+    // Concatenate todas as partes da mensagem
+    for (size_t i = 2; i < args.size(); ++i)
+    {
         message += args[i];
         if (i != args.size() - 1)
             message += " ";
@@ -643,26 +760,27 @@ void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::ve
     // Verifica se o destinatário é um canal ou um cliente
     std::string fullMsg = ":" + sender.getNickname() + "!" + sender.getUsername() + "@localhost PRIVMSG " + target + " :" + message + "\r\n";
 
-    if (target[0] == '#') {
+    if (target[0] == '#')
+    {
         /// Mensagem para um canal
         Channel& chan = server.getOrCreateChannel(target, &sender);
         chan.normalizeChannelName(); 
         // Normaliza o nome do canal
         const std::vector<Client*>& members = chan.getClients();
-        for (size_t i = 0; i < members.size(); ++i) {
+        for (size_t i = 0; i < members.size(); ++i)
             if (members[i]->getFd() != sender.getFd())
                 send(members[i]->getFd(), fullMsg.c_str(), fullMsg.length(), 0);
-        }
     }
-    else {
+    else
+    {
         // DM para a shorty
         const std::vector<Client *>& clients = server.getClients();
-        for (size_t i = 0; i < clients.size(); ++i) {
-            if (clients[i]->getNickname() == target) {
+        for (size_t i = 0; i < clients.size(); ++i)
+            if (clients[i]->getNickname() == target)
+            {
                 send(clients[i]->getFd(), fullMsg.c_str(), fullMsg.length(), 0);
                 return;
             }
-        }
         // Se não encontrar o destinatário, envia um erro
         std::string error = ":irc.42.local 401 " + sender.getNickname() + " " + target + " :No such nick/channel\r\n";
         // Envia o erro para o remetente
@@ -670,9 +788,10 @@ void CommandHandler::handlePrivmsg(Server& server, Client& sender, const std::ve
     }
 }
 
-void CommandHandler::handleKick(Server &server, Client &client, const std::vector<std::string> &args)
+void CommandHandler::handleKick(Server& server, Client& client, const std::vector<std::string>& args)
 {
-    if (args.size() < 3) {
+    if (args.size() < 3)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " KICK :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -682,23 +801,26 @@ void CommandHandler::handleKick(Server &server, Client &client, const std::vecto
     if (chanName[0] != '#')
         chanName = "#" + chanName;
 
-    if (!server.hasChannel(chanName)) {
+    if (!server.hasChannel(chanName))
+    {
         std::string error = ":irc.42.local 403 " + client.getNickname() + " " + chanName + " :No such channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
-    Channel &channel = server.getOrCreateChannel(chanName, &client);
+    Channel& channel = server.getOrCreateChannel(chanName, &client);
 
     // Check if client is in the channel
-    if (!channel.hasClient(&client)) {
+    if (!channel.hasClient(&client))
+    {
         std::string error = ":irc.42.local 442 " + client.getNickname() + " " + chanName + " :You're not on that channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
     // Check if the client is a channel operator
-    if (!channel.isOperatorInChannel(&client)) {
+    if (!channel.isOperatorInChannel(&client))
+    {
         std::string error = ":irc.42.local 482 " + client.getNickname() + " " + chanName + " :You're not channel operator\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -707,13 +829,15 @@ void CommandHandler::handleKick(Server &server, Client &client, const std::vecto
     std::string targetNick = args[2];
     Client *targetClient = server.getClientByNick(targetNick);
 
-    if (!targetClient) {
+    if (!targetClient)
+    {
         std::string error = ":irc.42.local 401 " + client.getNickname() + " " + targetNick + " :No such nick\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
-    if (!channel.hasClient(targetClient)) {
+    if (!channel.hasClient(targetClient))
+    {
         std::string error = ":irc.42.local 441 " + client.getNickname() + " " + targetNick + " " + chanName + " :User not on channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -721,7 +845,8 @@ void CommandHandler::handleKick(Server &server, Client &client, const std::vecto
 
     // Optional kick reason
     std::string reason = client.getNickname(); // default reason is kicker's nick
-    if (args.size() > 3) {
+    if (args.size() > 3)
+    {
         reason = args[3];
         for (size_t i = 4; i < args.size(); ++i)
             reason += " " + args[i];
@@ -729,31 +854,27 @@ void CommandHandler::handleKick(Server &server, Client &client, const std::vecto
             reason = reason.substr(1);
     }
 
-    std::string kickMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost KICK " +
-                          chanName + " " + targetNick + " :" + reason + "\r\n";
+    std::string kickMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost KICK " + chanName + " " + targetNick + " :" + reason + "\r\n";
 
     // Send KICK to all members before removing
-    const std::vector<Client *> &members = channel.getClients();
-    for (size_t i = 0; i < members.size(); ++i) {
+    const std::vector<Client *>& members = channel.getClients();
+    for (size_t i = 0; i < members.size(); ++i)
         send(members[i]->getFd(), kickMsg.c_str(), kickMsg.length(), 0);
-    }
 
     // Remove client from channel
     channel.removeClient(targetClient);
+    channel.incrementHowMany(channel.getHowMany() - 1);
     targetClient->removeInvite(chanName);
 
-    // If they were an operator, remove that too
-    
-    //channel.removeOperator(targetClient);
-
     // If channel is empty, delete it
-    if (channel.isEmpty()) {
+    if (channel.isEmpty())
         server.removeChannel(chanName);
-    }
 }
 
-void CommandHandler::handleTopic(Server &server, Client &client, const std::vector<std::string> &args) {
-    if (args.size() < 2) {
+void CommandHandler::handleTopic(Server& server, Client& client, const std::vector<std::string>& args)
+{
+    if (args.size() < 2)
+    {
         std::string error = ":irc.42.local 461 " + client.getNickname() + " TOPIC :Not enough parameters\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
@@ -763,39 +884,43 @@ void CommandHandler::handleTopic(Server &server, Client &client, const std::vect
     if (chanName[0] != '#')
         chanName = "#" + chanName;
 
-    if (!server.hasChannel(chanName)) {
+    if (!server.hasChannel(chanName))
+    {
         std::string error = ":irc.42.local 403 " + client.getNickname() + " " + chanName + " :No such channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
-    Channel &channel = server.getOrCreateChannel(chanName, &client);
+    Channel& channel = server.getOrCreateChannel(chanName, &client);
 
     // Check if client is in the channel
-    if (!channel.hasClient(&client)) {
+    if (!channel.hasClient(&client))
+    {
         std::string error = ":irc.42.local 442 " + client.getNickname() + " " + chanName + " :You're not on that channel\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
     // Check if the client is a channel operator
-    if (!channel.isOperatorInChannel(&client) && channel.isTopicRestricted()) {
+    if (!channel.isOperatorInChannel(&client) && channel.isTopicRestricted())
+    {
         std::string error = ":irc.42.local 482 " + client.getNickname() + " " + chanName + " :You're not channel operator\r\n";
         send(client.getFd(), error.c_str(), error.length(), 0);
         return;
     }
 
     // If no topic is provided, return the current topic
-    if (args.size() == 2) {
-        std::string topicReply = ":irc.42.local 332 " + client.getNickname() + " " + chanName +
-                                 " :" + channel.getTopic() + "\r\n";
+    if (args.size() == 2)
+    {
+        std::string topicReply = ":irc.42.local 332 " + client.getNickname() + " " + chanName + " :" + channel.getTopic() + "\r\n";
         send(client.getFd(), topicReply.c_str(), topicReply.length(), 0);
         return;
     }
 
     // Set the new topic
     std::string newTopic;
-    for (size_t i = 2; i < args.size(); ++i) {
+    for (size_t i = 2; i < args.size(); ++i)
+    {
         newTopic += args[i];
         if (i != args.size() - 1)
             newTopic += " ";
@@ -803,18 +928,14 @@ void CommandHandler::handleTopic(Server &server, Client &client, const std::vect
     if (newTopic[0] == ':')
         newTopic = newTopic.substr(1);
     channel.setTopic(newTopic);
-    std::string topicMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost TOPIC " +
-                           chanName + " :" + newTopic + "\r\n";
+    std::string topicMsg = ":" + client.getNickname() + "!" + client.getUsername() + "@localhost TOPIC " + chanName + " :" + newTopic + "\r\n";
     // Notify all clients in the channel
-    const std::vector<Client *> &members = channel.getClients();
-    for (size_t i = 0; i < members.size(); ++i) {
+    const std::vector<Client *>& members = channel.getClients();
+    for (size_t i = 0; i < members.size(); ++i)
         send(members[i]->getFd(), topicMsg.c_str(), topicMsg.length(), 0);
-    }
     // Send the topic to the client who set it
-    std::string topicReply = ":irc.42.local 332 " + client.getNickname() + " " + chanName +
-                             " :" + newTopic + "\r\n";
+    std::string topicReply = ":irc.42.local 332 " + client.getNickname() + " " + chanName + " :" + newTopic + "\r\n";
     send(client.getFd(), topicReply.c_str(), topicReply.length(), 0);
-    std::string topicEnd = ":irc.42.local 333 " + client.getNickname() + " " + chanName +
-                           " " + client.getNickname() + " :Topic set by " + client.getNickname() + "\r\n";
+    std::string topicEnd = ":irc.42.local 333 " + client.getNickname() + " " + chanName + " " + client.getNickname() + " :Topic set by " + client.getNickname() + "\r\n";
     send(client.getFd(), topicEnd.c_str(), topicEnd.length(), 0);
 }   
