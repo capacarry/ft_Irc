@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luiberna <luiberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:52:41 by luiberna          #+#    #+#             */
-/*   Updated: 2025/07/01 18:46:19 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/07/01 20:26:07 by luiberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -611,15 +611,47 @@ bool CommandHandler::notDuplicateUsername(Server& server, const std::string& use
 
 
 void CommandHandler::handleNick(Server& server, Client& client, const std::vector<std::string>& args)
-{
-    if (args.size() >= 2 && !args[1].empty() && notDuplicateNickname(server, args[1]))
-        client.setNickname(args[1]);
+{   
+    if ((args.size() != 2 || args[1].empty()) && !client.getUsername().empty())
+    {
+        std::string error = ":irc.42.local 431 * :No nickname given\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    // Check for duplicate nickname
+    if (!notDuplicateNickname(server, args[1]))
+    {
+        std::string error = ":irc.42.local 433 * " + args[1] + " :Nickname is already in use\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    // Set the client's nickname if valid
+    client.setNickname(args[1]);
+    std::cout << "NICK received: " << args[1] << "\n";
 }
 
 void CommandHandler::handleUser(Server& server, Client& client, const std::vector<std::string>& args)
-{
-    if (!args[1].empty() && notDuplicateUsername(server, args[1]))
-        client.setUsername(args[1]); // Tentar guardar o username
+{   
+     if (args.size() < 2 || args[1].empty())
+    {
+        std::string error = ":irc.42.local 431 * :No username given\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    // Check for duplicate username
+    if (!notDuplicateUsername(server, args[1]))
+    {
+        std::string error = ":irc.42.local 434 * " + args[1] + " :Username is already in use\r\n";
+        send(client.getFd(), error.c_str(), error.length(), 0);
+        return;
+    }
+
+    // Set the client's username if valid
+    client.setUsername(args[1]);
+    std::cout << "USER received: " << args[1] << "\r\n";
 }
 
 void CommandHandler::handleJoin(Server& server, Client& client, const std::vector<std::string>& args)

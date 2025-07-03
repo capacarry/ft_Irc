@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luiberna <luiberna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:35:23 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/07/01 16:48:50 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/07/01 19:44:06 by luiberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Server
         static bool _signal;
         std::vector<Client*> _clients;
         std::map<std::string, Channel> _channels;
+        std::map<int, std::string> _clientBuffers;
    
     public:
         int epollFd;
@@ -57,4 +58,5 @@ class Server
         void removeChannel(const std::string& name);
         void notifyChannelMembers(const std::string& channelName, const std::string& message);
         const std::vector<Client*>& getClients() const {return _clients;}
+        Client & getClientByFdRetRef(int fd);
 };

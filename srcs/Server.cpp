@@ -6,7 +6,7 @@
 /*   By: gcapa-pe <gcapa-pe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:50:54 by gcapa-pe          #+#    #+#             */
-/*   Updated: 2025/07/01 14:53:01 by gcapa-pe         ###   ########.fr       */
+/*   Updated: 2025/07/03 13:08:47 by gcapa-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,9 +275,10 @@ void Server::receiveData(int fd)
     else
     {   
         /* print da data */
-        buff[bytes] = '\0';
+        _clientBuffers[fd] += std::string(buff,bytes);
         /* pass data to debug log */
-        std::ofstream logFile("debug.log", std::ios::app); // open in append mode
+        size_t pos;
+         std::ofstream logFile("debug.log", std::ios::app); // open in append mode
         if (logFile.is_open())
         {
             logFile << "Client <" << fd << ">: " << buff << "\n";
@@ -285,17 +286,15 @@ void Server::receiveData(int fd)
         }
         else
             std::cerr << RED << "Failed to open debug.log\n" << R;
-        for (size_t i = 0; i < _clients.size(); ++i)
+        while(((pos = _clientBuffers[fd].find("\r\n")) != std::string::npos)
+                || (pos = _clientBuffers[fd].find("\n")) != std::string::npos)
         {
-            if (_clients[i]->getFd() == fd)
-            {
-                std::string input(buff);
-                std::istringstream stream(input);
-                std::string line;
-                while (std::getline(stream, line))
-                    CommandHandler::handleCommand(*this, *_clients[i], line);
-                break;
-            }
+            std::string fullCommand = _clientBuffers[fd].substr(0,pos);
+            _clientBuffers[fd].erase(0,pos + 2);
+            std::string input(buff);
+            std::istringstream stream(input);
+            std::string line;
+            CommandHandler::handleCommand(*this, getClientByFdRetRef(fd), fullCommand);
         }
     }
 }
@@ -344,3 +343,12 @@ Client* Server::getClientByFd(int fd) const
             return const_cast<Client*>(_clients[i]); // return non-const pointer
     return NULL; // client not found
 }
+
+Client & Server::getClientByFdRetRef(int fd) 
+{
+    for (size_t i = 0; i < _clients.size(); ++i)
+        if (_clients[i]->getFd() == fd)
+            return *_clients[i]; // return non-const pointer
+      throw std::runtime_error("Client not found for the given file descriptor"); // client not found
+}
+
